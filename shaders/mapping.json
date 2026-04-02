@@ -1,0 +1,88 @@
+{
+  "parameters": {
+    "softness": ["gaussianBlurRadius", "bilateralSigma"],
+    "grain": ["filmGrainAmount", "grainScale"],
+    "bloom": ["bloomThreshold", "bloomIntensity"],
+    "interference": ["moireStrength", "scanlineStrength", "phaseWarp"],
+    "contrast": ["toneCurveContrast"],
+    "clarity": ["localContrast"],
+    "colorBleed": ["chromaticAberration", "colorFringe"],
+    "vignette": ["vignetteAmount"]
+  },
+  "presets": {
+    "gentle_gaze": {
+      "softness": 0.65,
+      "grain": 0.55,
+      "bloom": 0.60,
+      "interference": 0.25,
+      "contrast": 0.40,
+      "clarity": 0.30,
+      "colorBleed": 0.30,
+      "vignette": 0.20,
+      "gaussianBlurRadius": 0.35,
+      "filmGrainAmount": 0.45,
+      "bloomIntensity": 0.40,
+      "moireStrength": 0.10,
+      "chromaticAberration": 0.12,
+      "localContrast": 0.30,
+      "toneCurveContrast": 0.42,
+      "vignetteAmount": 0.20
+    },
+    "heavy_gaze": {
+      "softness": 0.85,
+      "grain": 0.75,
+      "bloom": 0.80,
+      "interference": 0.55,
+      "contrast": 0.38,
+      "clarity": 0.18,
+      "colorBleed": 0.55,
+      "vignette": 0.32,
+      "gaussianBlurRadius": 0.55,
+      "filmGrainAmount": 0.70,
+      "bloomIntensity": 0.62,
+      "moireStrength": 0.30,
+      "chromaticAberration": 0.25,
+      "localContrast": 0.18,
+      "toneCurveContrast": 0.38,
+      "vignetteAmount": 0.32
+    },
+    "total_wall": {
+      "softness": 0.92,
+      "grain": 0.88,
+      "bloom": 0.90,
+      "interference": 0.72,
+      "contrast": 0.34,
+      "clarity": 0.12,
+      "colorBleed": 0.70,
+      "vignette": 0.40,
+      "gaussianBlurRadius": 0.70,
+      "filmGrainAmount": 0.85,
+      "bloomIntensity": 0.78,
+      "moireStrength": 0.45,
+      "chromaticAberration": 0.35,
+      "localContrast": 0.12,
+      "toneCurveContrast": 0.34,
+      "vignetteAmount": 0.40
+    }
+  },
+  "pedalboard_order": [
+    "softness (diffusion)",
+    "bloom / halation",
+    "memory texture (grain + dust + paper)",
+    "color bleed (chroma aberration)",
+    "interference (moire/phase warp) [optional]",
+    "vignette (gentle)"
+  ],
+  "dial_guide": {
+    "clarity": {
+      "0.1": "subject mostly implied",
+      "0.3": "eyes or one highlight is crisp",
+      "0.6": "too clean — leaving shoegaze territory"
+    },
+    "interference": {
+      "0.1": "shimmer only (suggestion)",
+      "0.4": "visible moire/phase drift",
+      "0.7": "total wall (must be fused into haze)"
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "avoid": [
+    "razor sharp",
+    "hyper-detailed skin",
+    "hard-edged outlines",
+    "perfectly clean gradients",
+    "sterile studio look",
+    "overly crisp typography",
+    "high clarity HDR",
+    "ultra sharp",
+    "tack sharp",
+    "clinical HDR",
+    "high clarity",
+    "hyper-detailed everywhere",
+    "crisp outlines",
+    "hard rim light",
+    "sterile studio product photo",
+    "clean vector art",
+    "perfectly clean gradients",
+    "over-processed clarity"
+  ],
+  "when_using_typography_avoid": [
+    "big headline text",
+    "clean vector type",
+    "perfect kerning",
+    "large readable headline text",
+    "poster design",
+    "billboard poster composition",
+    "modern brand identity"
+  ],
+  "portrait_avoid": [
+    "overdefined pores",
+    "plastic skin",
+    "beauty dish sharpness",
+    "hard edge makeup ad lighting",
+    "hyper-detailed skin",
+    "hard rim light",
+    "too much clarity"
+  ],
+  "sound_math_avoid": [
+    "diagram",
+    "axes",
+    "grid with numbers",
+    "labeled chart",
+    "annotation arrows",
+    "UI overlay",
+    "technical schematic",
+    "infographic",
+    "clean vector lines",
+    "perfect symmetry"
+  ],
+  "global_style_killers": [
+    "crisp outlines everywhere",
+    "clinical HDR, ultra-clarity",
+    "sterile modern product lighting",
+    "hyper-detailed everything sharp realism",
+    "flat clean vector sterility",
+    "overly readable poster typography"
+  ]
+}

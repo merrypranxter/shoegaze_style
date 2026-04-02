@@ -1,0 +1,57 @@
+[
+  {
+    "name": "portrait_gentle",
+    "subject": "a singer under streetlight",
+    "palette": "haze-pastel",
+    "preset": "gentle_gaze",
+    "include_modules": [
+      "core", "light", "texture", "composition", "camera", "mood"
+    ],
+    "expect_includes": ["shoegaze aesthetic", "soft focus", "film grain", "halation"],
+    "expect_excludes": ["ultra sharp", "clinical HDR"]
+  },
+  {
+    "name": "abstract_total_wall",
+    "subject": "a human silhouette implied by beat-frequency interference",
+    "palette": "cd-iridescent",
+    "preset": "total_wall",
+    "include_modules": [
+      "core", "light", "texture", "interference", "composition"
+    ],
+    "expect_includes": ["moire", "phase drift", "standing-wave"],
+    "expect_excludes": ["clean vector"]
+  },
+  {
+    "name": "album_cover_zine",
+    "subject": "centered silhouette, minimal, album cover",
+    "palette": "sepia-zine",
+    "preset": "zine_haze",
+    "include_modules": [
+      "core", "light", "texture", "composition", "print_memory", "album_artifacts"
+    ],
+    "expect_includes": ["matte", "negative space", "shoegaze aesthetic"],
+    "expect_excludes": ["ultra sharp", "big headline text", "clean vector typography"]
+  },
+  {
+    "name": "environment_nocturne",
+    "subject": "rainy night street, wet asphalt",
+    "palette": "nocturne-neon",
+    "preset": "heavy_gaze",
+    "include_modules": [
+      "core", "light", "texture", "composition", "camera", "interference"
+    ],
+    "expect_includes": ["shoegaze aesthetic", "halation", "film grain", "edges dissolving"],
+    "expect_excludes": ["tack sharp", "clinical HDR", "hard rim light"]
+  },
+  {
+    "name": "sound_math_harmonic",
+    "subject": "harmonic ladder landscape, spectral columns, overtone ribs",
+    "palette": "haze-pastel",
+    "preset": "gentle_gaze",
+    "include_modules": [
+      "core", "light", "texture", "interference", "composition"
+    ],
+    "expect_includes": ["shoegaze aesthetic", "diffusion bloom", "film grain", "haze"],
+    "expect_excludes": ["diagram", "axes", "labeled chart", "clean vector lines"]
+  }
+]

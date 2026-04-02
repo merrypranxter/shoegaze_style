@@ -1,0 +1,283 @@
+{
+  "id": "shoegaze",
+  "name": "Shoegaze",
+  "version": "1.0.0",
+  "description": "Wall-of-texture visuals: haze+bloom+grain, optional interference. Mood over clarity.",
+  "tags": ["atmospheric", "haze", "bloom", "grain", "nostalgic", "interference", "field-over-subject"],
+
+  "blocks": {
+    "core": [
+      "shoegaze aesthetic",
+      "wall of texture",
+      "atmosphere-first",
+      "edges dissolving into haze",
+      "subject dissolves into texture field"
+    ],
+    "light": [
+      "dreamy diffusion bloom",
+      "halation glow",
+      "light leaks",
+      "fog volume",
+      "washed midtones",
+      "low contrast rolloff"
+    ],
+    "texture": [
+      "film grain clumps",
+      "dust and scratches",
+      "matte paper fiber",
+      "tactile noise",
+      "soft micro-contrast",
+      "smudged highlights"
+    ],
+    "interference": [
+      "moire interference shimmer",
+      "phase drift ripples",
+      "beat-frequency bands",
+      "standing-wave geometry",
+      "alias shimmer",
+      "pattern-implied silhouette"
+    ],
+    "composition": [
+      "field over subject",
+      "large negative space",
+      "foreground haze layer",
+      "depth haze stack",
+      "texture dominates form",
+      "gentle vignette"
+    ],
+    "camera": [
+      "diffusion filter",
+      "soft-focus lens",
+      "subtle chromatic aberration",
+      "low clarity"
+    ],
+    "mood": [
+      "romantic melancholy",
+      "immersive atmosphere",
+      "nostalgic dreaminess"
+    ],
+    "veil_layers": [
+      "foreground haze veil",
+      "midground diffusion mist",
+      "background atmosphere wash",
+      "soft occlusion fog",
+      "transparent texture layers"
+    ],
+    "print_memory": [
+      "newsprint softness",
+      "halftone ghost dots",
+      "ink bleed edges",
+      "misregistration drift",
+      "xerox generation loss"
+    ],
+    "signal_memory": [
+      "CRT bloom",
+      "scanline haze",
+      "phosphor smear",
+      "VHS noise veil",
+      "codec scars (subtle)"
+    ],
+    "chromatics": [
+      "pastel chroma wash",
+      "subtle color bleed",
+      "milky highlights",
+      "muted midtones",
+      "iridescent oil-slick highlights (optional)"
+    ],
+    "motion_time": [
+      "long-exposure smear",
+      "time-lag ghosting",
+      "reverb-like trails",
+      "slow shutter glow",
+      "temporal echo bands"
+    ],
+    "weather_space": [
+      "misty dusk air",
+      "overcast softness",
+      "rain haze",
+      "humid night glow",
+      "atmospheric perspective"
+    ],
+    "subject_archetypes": [
+      "silhouette in static",
+      "face implied by texture",
+      "figure half-absorbed into fog",
+      "hands emerging from grain",
+      "eyes as the only sharp detail"
+    ],
+    "album_artifacts": [
+      "matte sleeve texture",
+      "faded liner-note fragments",
+      "subtle spine text ghost",
+      "creased cover wear",
+      "archival sticker residue"
+    ],
+    "typography_whispers": [
+      "barely readable text remnants",
+      "smeared caption fragments",
+      "overprinted letters",
+      "faded stamp marks",
+      "ghost typography, not headline"
+    ],
+    "lens_defects": [
+      "lens haze",
+      "soft flare bloom",
+      "chromatic aberration",
+      "slight focus breathing",
+      "edge softness falloff"
+    ]
+  },
+
+  "defaults": {
+    "enabledBlocks": ["core", "light", "texture", "composition", "camera", "mood", "veil_layers"],
+    "optionalBlocks": ["interference", "print_memory", "signal_memory", "chromatics", "motion_time", "weather_space"]
+  },
+
+  "negatives": [
+    "ultra sharp",
+    "razor sharp",
+    "tack sharp",
+    "clinical HDR",
+    "high clarity",
+    "hyper-detailed everywhere",
+    "crisp outlines",
+    "hard rim light",
+    "sterile studio product photo",
+    "clean vector art",
+    "perfectly clean gradients",
+    "over-processed clarity"
+  ],
+
+  "negativeGroups": {
+    "no_infographic": [
+      "diagram",
+      "axes",
+      "grid with numbers",
+      "labeled chart",
+      "annotation arrows",
+      "UI overlay",
+      "technical schematic",
+      "infographic"
+    ]
+  },
+
+  "palettes": {
+    "haze_pastel": {
+      "notes": "dream-pop wash",
+      "swatches": ["#F2D7E7", "#D7E7FF", "#DDEEDB", "#F7F0C8", "#C9C0D8"]
+    },
+    "nocturne_neon": {
+      "notes": "night haze + neon bleed",
+      "swatches": ["#0B1020", "#1C2A4A", "#FF4FD8", "#59D7FF", "#FFD26A"]
+    },
+    "sepia_zine": {
+      "notes": "xerox nostalgia",
+      "swatches": ["#1B1A17", "#3A332E", "#B59B7D", "#E6D7C7", "#8C7A6B"]
+    },
+    "cd_iridescent": {
+      "notes": "holographic oil-slick highlights",
+      "swatches": ["#8AF7FF", "#FF7AF2", "#FFF07A", "#7AFF9E", "#B58CFF"]
+    },
+    "sodium_fog": {
+      "notes": "streetlight mist, warm glow + deep night",
+      "swatches": ["#0A0F18", "#1B2A3A", "#F6B45A", "#FFD7A1", "#7A8CA5"]
+    },
+    "milkglass": {
+      "notes": "milky highlights + soft neutrals",
+      "swatches": ["#F3F0EA", "#D9D5CF", "#B7B0A7", "#8C8680", "#3A3A3A"]
+    },
+    "bruise_bloom": {
+      "notes": "romantic melancholy, deep purples + faded pinks",
+      "swatches": ["#120A1A", "#2A163A", "#6B3FA0", "#E2A3C8", "#A3B8FF"]
+    }
+  },
+
+  "presets": {
+    "gentle_gaze": {
+      "enabledBlocks": ["core", "light", "texture", "composition", "camera", "mood"],
+      "optionalBlocks": [],
+      "palette": "haze_pastel"
+    },
+    "heavy_gaze": {
+      "enabledBlocks": ["core", "light", "texture", "composition", "camera", "mood", "interference"],
+      "optionalBlocks": [],
+      "palette": "nocturne_neon"
+    },
+    "total_wall": {
+      "enabledBlocks": ["core", "light", "texture", "interference", "composition", "camera", "mood"],
+      "optionalBlocks": [],
+      "palette": "cd_iridescent"
+    },
+    "zine_haze": {
+      "enabledBlocks": ["core", "light", "texture", "composition", "camera", "mood", "print_memory", "album_artifacts"],
+      "optionalBlocks": ["typography_whispers"],
+      "palette": "sepia_zine"
+    },
+    "crt_reverb": {
+      "enabledBlocks": ["core", "light", "texture", "composition", "camera", "mood", "signal_memory", "motion_time"],
+      "optionalBlocks": ["interference"],
+      "palette": "nocturne_neon"
+    },
+    "pastel_wash": {
+      "enabledBlocks": ["core", "light", "texture", "composition", "camera", "mood", "chromatics", "veil_layers"],
+      "optionalBlocks": [],
+      "palette": "haze_pastel"
+    },
+    "sodium_melancholy": {
+      "enabledBlocks": ["core", "light", "texture", "composition", "camera", "mood", "weather_space", "veil_layers"],
+      "optionalBlocks": ["interference"],
+      "palette": "nocturne_neon"
+    },
+    "iridescent_interference": {
+      "enabledBlocks": ["core", "light", "texture", "interference", "composition", "camera", "mood", "chromatics"],
+      "optionalBlocks": ["motion_time"],
+      "palette": "cd_iridescent"
+    }
+  },
+
+  "shader": {
+    "knobs": ["softness", "grain", "bloom", "interference", "contrast", "clarity", "color_bleed", "vignette"],
+    "presets": {
+      "gentle_gaze": { "softness": 0.72, "grain": 0.55, "bloom": 0.60, "interference": 0.20, "contrast": 0.44, "clarity": 0.32, "color_bleed": 0.30, "vignette": 0.18 },
+      "heavy_gaze":  { "softness": 0.86, "grain": 0.76, "bloom": 0.82, "interference": 0.55, "contrast": 0.38, "clarity": 0.18, "color_bleed": 0.55, "vignette": 0.30 },
+      "total_wall":  { "softness": 0.92, "grain": 0.88, "bloom": 0.90, "interference": 0.74, "contrast": 0.34, "clarity": 0.12, "color_bleed": 0.70, "vignette": 0.40 }
+    }
+  },
+
+  "weights": {
+    "core": 1.0,
+    "light": 0.9,
+    "texture": 0.9,
+    "composition": 0.8,
+    "camera": 0.6,
+    "mood": 0.5,
+    "veil_layers": 0.7,
+    "interference": 0.6,
+    "print_memory": 0.6,
+    "signal_memory": 0.5,
+    "chromatics": 0.4,
+    "motion_time": 0.4,
+    "weather_space": 0.4,
+    "typography_whispers": 0.3,
+    "album_artifacts": 0.3,
+    "lens_defects": 0.5
+  },
+
+  "siblings": [
+    "dream_pop",
+    "ethereal_wave",
+    "pictorialism",
+    "hauntology",
+    "slowcore",
+    "zine_xeroxcore",
+    "analog_video_synth",
+    "op_art_interference"
+  ],
+
+  "compiler": {
+    "joiner": ", ",
+    "negativePrefix": "--no ",
+    "order": ["subject", "core", "light", "texture", "interference", "composition", "camera", "mood", "palette", "negatives"],
+    "paletteFormat": "palette:{palette}"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "tokens": [
+    "soft-focus lens",
+    "diffusion filter",
+    "slight chromatic aberration",
+    "subtle chromatic aberration",
+    "low contrast rolloff",
+    "gentle vignette",
+    "slight lens bloom",
+    "low clarity",
+    "edge softness falloff",
+    "lens haze",
+    "slight focus breathing"
+  ],
+  "knob_to_language": {
+    "softness": {
+      "low": "slightly soft focus",
+      "mid": "soft focus",
+      "high": "dreamy diffusion, heavy soft focus"
+    },
+    "clarity": {
+      "low": "low clarity",
+      "mid": "reduced clarity",
+      "high": "(avoid — leaves shoegaze territory)"
+    },
+    "color_bleed": {
+      "low": "subtle chromatic aberration",
+      "mid": "chromatic aberration, color fringe",
+      "high": "strong color bleed, heavy chromatic aberration"
+    }
+  },
+  "avoid": [
+    "tack sharp lens",
+    "clinical sharpness",
+    "oversharpened output",
+    "high-frequency detail lens",
+    "macro super-detail"
+  ],
+  "notes": "Camera settings should reinforce atmosphere, not fight it. Diffusion filters, slight aberration, and lens haze are the core tools. Never use clarity-boosting settings."
+}

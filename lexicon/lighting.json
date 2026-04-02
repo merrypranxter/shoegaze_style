@@ -1,0 +1,44 @@
+{
+  "tokens": [
+    "halation glow",
+    "diffusion bloom",
+    "dreamy diffusion bloom",
+    "light leaks",
+    "fog volume",
+    "sodium vapor glow",
+    "neon bleed",
+    "washed midtones",
+    "low contrast rolloff",
+    "milky highlights",
+    "soft flare bloom",
+    "phosphor smear",
+    "CRT bloom",
+    "overcast softness",
+    "misty dusk air",
+    "rain haze",
+    "humid night glow",
+    "atmospheric perspective",
+    "ambient fog volume"
+  ],
+  "time_of_day": [
+    "dusk",
+    "night",
+    "overcast morning"
+  ],
+  "quality": {
+    "bloom": {
+      "low": "subtle bloom",
+      "mid": "diffusion bloom, halation",
+      "high": "strong halation glow, blown bloom"
+    },
+    "notes": "Bloom should feel organic — lens-flare memory, not studio strobe. Favor halation (film overspill) over HDR-style highlights."
+  },
+  "avoid": [
+    "harsh studio strobe",
+    "hard rim light",
+    "clinical HDR",
+    "sterile product lighting",
+    "beauty dish sharpness",
+    "hard edge makeup ad lighting"
+  ]
+}

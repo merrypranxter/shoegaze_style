@@ -1,0 +1,61 @@
+{concept}, implied form emerging from interference, beat-frequency bands,
+moire shimmer, standing-wave ripples, phase drift, shoegaze texture field,
+oil-slick iridescence, grain veil, atmospheric depth, {palette}
+--no clean vector lines, perfect symmetry
+
+---
+
+## Abstract / Sound-as-Image Engines
+
+Use one engine + the shoegaze core stack.
+
+### Engine: Harmonic Ladder (additive)
+harmonic ladder, spectral columns, overtone ribs, smooth banded gradients, cathedral-like resonance
+
+### Engine: Granular Cloud
+particle swarm texture, grain cloud, micro-event glitter, stochastic shimmer fog, pointillist haze
+
+### Engine: FM Sidebands
+spectral comb lattice, sideband ribs, metallic crystal harmonics, insect-wing geometry, abrupt complexity spikes
+
+### Engine: Polyrhythm Lattice
+phase-offset grids, rotating mandala pulses, rhythmic tiling, clockwork rosettes, interlocking cycles
+
+### Engine: Convolution Reverb Ghosts
+impulse-response trails, temporal smears, echo halos, reverb fog volume, ghost bands
+
+### Master template
+{ENGINE}, shoegaze aesthetic, wall of texture, dreamy diffusion bloom, halation glow, film grain clumps, edges dissolving into haze, {PALETTE}
+NEG: crisp outlines, clinical HDR, clean vector art
+
+---
+
+## Abstract / Sound-as-Image Seeds (25-pack entries 17–22)
+
+17. human silhouette implied by beat-frequency interference, moire shimmer, phase drift ripples, grain veil, halation
+18. harmonic ladder landscape: spectral columns, overtone ribs, smooth banded gradients, shoegaze haze stack
+19. granular cloud field: particle swarm texture, micro-event glitter, stochastic shimmer fog, edges dissolve
+20. FM sideband crystals: spectral comb lattice, metallic bloom, abrupt complexity spikes, soft diffusion haze
+21. standing-wave mandalas hidden inside fog, interference patterns fused into atmosphere, not crisp overlays
+22. oil-slick iridescent interference field, holographic highlights, moire vibration, texture dominates form
+
+### Abstract template (total_wall preset)
+{CONCEPT}, implied silhouette emerging from interference, beat-frequency bands, phase drift, moire shimmer, standing-wave geometry, oil-slick iridescence, grain veil, texture field dominates, cd_iridescent
+NEG: clean vector lines, perfect symmetry, sterile gradients
+
+---
+
+## Audio → Visual Mappings (quick reference)
+
+- Pitch → vertical position (high = high)
+- Loudness → brightness / bloom intensity
+- Timbre brightness → edge sharpness / sparkle
+- Noise amount → grain density / fog thickness
+- Harmonicity → clean banding vs smeared clouds
+- Transients → thin vertical streaks / needle highlights
+- Reverb → ghost trails / depth haze / temporal smear
+- Distortion → texture thickness + edge fuzz + interference shimmer
+- Chorus/flange/phaser → phase drift ripples + moiré shimmer
+- Compression → flattened contrast + "pumped" glow rhythm
+
+Rule: interference must live INSIDE haze, not on top as crisp UI.
