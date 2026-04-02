@@ -1,0 +1,2942 @@
+Absolutely—let’s turn SHOEGAZE into a clean, reusable style repo your apps can consume.
+Below is a drop-in repo blueprint + a shoegaze style pack (tokens, palettes, “knobs,” negative prompts, shader mappings, prompt templates, and a tiny test suite idea). You can copy/paste this whole thing into a new GitHub repo and iterate.
+
+Repo blueprint: shoegaze-style
+Suggested folder structure
+shoegaze-style/
+  README.md
+  LICENSE
+  style.json
+  lexicon/
+    tokens.json
+    negatives.json
+    palette.json
+    materials.json
+    lighting.json
+    camera.json
+  prompts/
+    base.txt
+    portraits.txt
+    environments.txt
+    abstract.txt
+    album-covers.txt
+  shaders/
+    mapping.json
+    glsl_notes.md
+  tests/
+    prompt-fixtures.json
+    golden-notes.md
+  examples/
+    before-after.md
+
+
+style.json (the main manifest your apps load)
+Use this as the single source of truth.
+{
+  "id": "shoegaze",
+  "name": "Shoegaze",
+  "version": "1.0.0",
+  "author": "YOU",
+  "tags": ["atmospheric", "layered", "haze", "nostalgic", "dreamy", "texture-first"],
+  "description": "Wall-of-texture visuals: subject dissolves into haze, grain, bloom, and interference. Mood over clarity.",
+  "defaults": {
+    "intensity": 0.72,
+    "softness": 0.80,
+    "grain": 0.68,
+    "bloom": 0.74,
+    "interference": 0.52,
+    "contrast": 0.42,
+    "clarity": 0.25,
+    "colorBleed": 0.45,
+    "vignette": 0.28
+  },
+  "prompt": {
+    "prefix": [
+      "shoegaze aesthetic",
+      "wall of texture",
+      "atmospheric haze",
+      "edges dissolving into grain",
+      "dreamy diffusion bloom",
+      "nostalgic light leaks"
+    ],
+    "suffix": [
+      "soft focus",
+      "low micro-contrast",
+      "film grain",
+      "halation",
+      "subtle chromatic aberration",
+      "ambient fog volume"
+    ]
+  },
+  "negatives": [
+    "crisp outlines",
+    "ultra sharp",
+    "clinical HDR",
+    "high clarity",
+    "clean vector art",
+    "hard edge rim light",
+    "overdefined pores",
+    "busy high-frequency detail everywhere"
+  ],
+  "palettes": ["haze-pastel", "nocturne-neon", "sepia-zine", "cd-iridescent"],
+  "renderHints": {
+    "composition": ["centered subject, large negative space", "foreground haze layer", "texture dominates subject"],
+    "materials": ["matte paper", "fogged glass", "wet asphalt reflections", "gauze / fabric diffusion"],
+    "time": ["dusk", "night", "overcast morning"]
+  }
+}
+
+
+Lexicon packs (reusable “word modules”)
+lexicon/tokens.json (shoegaze = texture modifiers + atmosphere)
+{
+  "core": [
+    "shoegaze aesthetic",
+    "wall of texture",
+    "dreamy diffusion",
+    "soft focus haze",
+    "edges dissolve into atmosphere",
+    "nostalgic grain",
+    "light leak bloom",
+    "halation glow"
+  ],
+  "texture": [
+    "film grain clumps",
+    "dust and scratches",
+    "matte paper fiber",
+    "xerox ghosting",
+    "halftone residue",
+    "fogged lens",
+    "smudged highlights"
+  ],
+  "interference": [
+    "moire interference shimmer",
+    "phase drift patterns",
+    "aliasing glitter",
+    "standing-wave ripples",
+    "beat-frequency bands",
+    "signal noise veil"
+  ],
+  "color": [
+    "pastel wash",
+    "sodium vapor glow",
+    "neon bleed",
+    "oil-slick iridescence",
+    "muted romance tones",
+    "washed midtones"
+  ],
+  "camera": [
+    "soft-focus lens",
+    "diffusion filter",
+    "slight chromatic aberration",
+    "low contrast rolloff",
+    "gentle vignette"
+  ]
+}
+
+lexicon/negatives.json
+{
+  "avoid": [
+    "razor sharp",
+    "hyper-detailed skin",
+    "hard-edged outlines",
+    "perfectly clean gradients",
+    "sterile studio look",
+    "overly crisp typography",
+    "high clarity HDR"
+  ],
+  "when_using_typography_avoid": [
+    "big headline text",
+    "clean vector type",
+    "perfect kerning"
+  ]
+}
+
+lexicon/palette.json (named palettes your UI can expose)
+{
+  "haze-pastel": {
+    "notes": "dream pop soft wash",
+    "swatches": ["#F2D7E7", "#D7E7FF", "#DDEEDB", "#F7F0C8", "#C9C0D8"]
+  },
+  "nocturne-neon": {
+    "notes": "night haze + neon bleed",
+    "swatches": ["#0B1020", "#1C2A4A", "#FF4FD8", "#59D7FF", "#FFD26A"]
+  },
+  "sepia-zine": {
+    "notes": "photocopy nostalgia",
+    "swatches": ["#1B1A17", "#3A332E", "#B59B7D", "#E6D7C7", "#8C7A6B"]
+  },
+  "cd-iridescent": {
+    "notes": "holographic oil-slick highlights",
+    "swatches": ["#8AF7FF", "#FF7AF2", "#FFF07A", "#7AFF9E", "#B58CFF"]
+  }
+}
+
+
+Prompt templates (ready for your style engine)
+prompts/base.txt
+{subject}, shoegaze aesthetic, wall of texture, atmospheric haze, dreamy diffusion bloom,
+edges dissolving into grain, halation, film grain, subtle light leaks,
+low micro-contrast, soft focus, gentle vignette, {palette}, {extra_texture}, {interference}
+--no crisp outlines, ultra sharp, clinical HDR
+
+prompts/portraits.txt
+{subject portrait}, face partially implied by haze, gauze diffusion, soft focus lens,
+shoegaze aesthetic, nostalgic grain, highlight bloom, chromatic aberration,
+background melts into texture field, {palette}, {interference}
+--no sharp pores, overdefined anatomy, hard rim light
+
+prompts/abstract.txt (your “math-of-sound” lane)
+{concept}, implied form emerging from interference, beat-frequency bands,
+moire shimmer, standing-wave ripples, phase drift, shoegaze texture field,
+oil-slick iridescence, grain veil, atmospheric depth, {palette}
+--no clean vector lines, perfect symmetry
+
+prompts/album-covers.txt
+album cover design, centered minimal subject dissolving into texture field,
+shoegaze aesthetic, matte paper fiber, washed midtones, soft blur, subtle typography ghost,
+large negative space, {palette}
+--no big readable text, no clean vector poster look
+
+
+Shader mapping (for your shader apps)
+shaders/mapping.json
+Map the word vibe to real knobs.
+{
+  "parameters": {
+    "softness": ["gaussianBlurRadius", "bilateralSigma"],
+    "grain": ["filmGrainAmount", "grainScale"],
+    "bloom": ["bloomThreshold", "bloomIntensity"],
+    "interference": ["moireStrength", "scanlineStrength", "phaseWarp"],
+    "contrast": ["toneCurveContrast"],
+    "clarity": ["localContrast"],
+    "colorBleed": ["chromaticAberration", "colorFringe"],
+    "vignette": ["vignetteAmount"]
+  },
+  "presets": {
+    "gentle_gaze": {
+      "softness": 0.65,
+      "grain": 0.55,
+      "bloom": 0.60,
+      "interference": 0.25,
+      "contrast": 0.40,
+      "clarity": 0.30,
+      "colorBleed": 0.30,
+      "vignette": 0.20
+    },
+    "heavy_gaze": {
+      "softness": 0.85,
+      "grain": 0.75,
+      "bloom": 0.80,
+      "interference": 0.55,
+      "contrast": 0.38,
+      "clarity": 0.18,
+      "colorBleed": 0.55,
+      "vignette": 0.32
+    },
+    "total_wall": {
+      "softness": 0.92,
+      "grain": 0.88,
+      "bloom": 0.90,
+      "interference": 0.72,
+      "contrast": 0.34,
+      "clarity": 0.12,
+      "colorBleed": 0.70,
+      "vignette": 0.40
+    }
+  }
+}
+
+
+A tight README (what your future self will thank you for)
+README.md (starter)
+# Shoegaze Style
+
+Shoegaze is a *texture-first* visual style: subject dissolves into haze, grain, bloom, and interference.
+Think "wall of sound" translated into "wall of atmosphere".
+
+## What this style does
+- Softens boundaries (low clarity, soft focus)
+- Layers texture (grain, dust, paper fiber, light leaks)
+- Prioritizes mood and field over object detail
+- Optional interference math (moire, phase drift, beat bands)
+
+## Quick use
+- Load `style.json`
+- Merge `style.prompt.prefix + your subject + style.prompt.suffix`
+- Apply `style.negatives`
+- Pick a palette from `lexicon/palette.json`
+- Optionally apply a shader preset from `shaders/mapping.json`
+
+## Recommended presets
+- gentle_gaze: portraits, soft scenes
+- heavy_gaze: nocturne neon, rainy streets
+- total_wall: abstract interference / “sound as image”
+
+
+Tests (so your style doesn’t drift)
+tests/prompt-fixtures.json
+[
+  {
+    "name": "portrait_gentle",
+    "subject": "a singer under streetlight",
+    "palette": "haze-pastel",
+    "expect_includes": ["shoegaze aesthetic", "soft focus", "film grain", "halation"],
+    "expect_excludes": ["ultra sharp", "clinical HDR"]
+  },
+  {
+    "name": "abstract_total_wall",
+    "subject": "a human silhouette implied by beat-frequency interference",
+    "palette": "cd-iridescent",
+    "expect_includes": ["moire", "phase drift", "standing-wave"],
+    "expect_excludes": ["clean vector"]
+  }
+]
+
+
+What makes it feel shoegaze (the “rules”)
+These are the style invariants—use them to keep the repo coherent:
+Field > subject (texture is the protagonist)
+Soft boundaries (no hard edges unless it’s glitch/aliasing)
+Layer stack (at least 3 layers: haze + grain + bloom; optional interference)
+Nostalgia physics (light leaks, halation, paper/print/vhs memory)
+For historical grounding: soft-focus + manipulated prints are central to Pictorialism (a real pre-digital ancestor of “shoegaze haze”). (Art Institute of Chicago Archive)
+And the Orton effect is literally “sharp + blur blended,” i.e., a photographic version of “wall-of-texture.” (Iceland Photo Tours)
+Riso / misregistration / overprint is a clean way to get tactile layering. (Dribbble)
+
+Next: I can tailor this to your exact style-repo system
+If you paste one of your existing style repo manifests (even just the top half), I’ll:
+match your exact schema,
+generate the shoegaze pack in that format,
+and include 10–20 “style unit tests” your pipeline can run.
+If this sparks you, next knock on → “Hauntology Style repo” (lost-future fog) or “Granular Synthesis Visuals” (particle-wall shoegaze).
+Yep — I can see it, and I can mirror that exact “modular style-system repo” grammar for a SHOEGAZE_STYLE repo.
+Your reference repo is organized as a big style encyclopedia with:
+top-level anchor docs (README.md, STYLE_OVERVIEW.md, QUICKSTART_PROMPTS.md, NEGATIVES.md, CROSSOVER_RECIPES.md, TAGS_INDEX.md, etc.)
+then numbered folders (00_foundation/, 01_eras/, 02_core_branches/ …) (GitHub)
+Below is a ready-to-paste repo starter in the same spirit + structure.
+
+0) Repo name + structure
+Call it something like: shoegaze_style (or shoegaze_aesthetic).
+shoegaze_style/
+├── README.md
+├── REPO_STRUCTURE.md
+├── STYLE_OVERVIEW.md
+├── QUICKSTART_PROMPTS.md
+├── TAGS_INDEX.md
+├── NEGATIVES.md
+├── CROSSOVER_RECIPES.md
+├── 00_foundation/
+│   ├── DEFINITIONS.md
+│   ├── OPERATING_PRINCIPLES.md
+│   └── EMOTIONAL_SPECTRUM.md
+├── 01_eras/
+│   ├── 80s_proto_haze.md
+│   ├── 90s_wall_of_sound.md
+│   ├── 00s_blog_haze.md
+│   └── modern_post_shoegaze.md
+├── 02_core_branches/
+│   ├── A_haze_bloom.md
+│   ├── B_grain_print_memory.md
+│   ├── C_interference_math.md
+│   └── D_nocturne_neon.md
+├── 03_visual_elements/
+│   ├── edges_and_boundaries.md
+│   ├── veils_and_layers.md
+│   └── typographic_ghosts.md
+├── 04_materials_and_textures/
+│   ├── film_and_halation.md
+│   ├── paper_xerox_zine.md
+│   ├── crt_vhs_signal.md
+│   └── oil_slick_iridescence.md
+├── 05_motifs_and_objects/
+│   ├── silhouettes_in_static.md
+│   ├── wet_street_lights.md
+│   └── album_cover_artifacts.md
+├── 06_composition_and_behavior/
+│   ├── field_over_subject.md
+│   ├── negative_space.md
+│   ├── dissolve_rules.md
+│   └── depth_haze_stack.md
+├── 07_palettes/
+│   ├── haze_pastel.md
+│   ├── nocturne_neon.md
+│   ├── sepia_zine.md
+│   └── cd_iridescent.md
+├── 08_prompt_modules/
+│   ├── MODULE_core_stack.md
+│   ├── MODULE_lighting.md
+│   ├── MODULE_textures.md
+│   ├── MODULE_interference.md
+│   └── MODULE_album_cover_layout.md
+├── 09_style_merges/
+│   ├── shoegaze_x_dreampop.md
+│   ├── shoegaze_x_hauntology.md
+│   ├── shoegaze_x_vaporwave.md
+│   └── shoegaze_x_glitch.md
+├── 10_reference_lists/
+│   ├── vocab_hoard.md
+│   └── photographers_films_processes.md
+└── 99_appendix/
+    ├── naming_rules.md
+    └── roadmap.md
+
+This matches the “numbered modular library + anchor docs” pattern in your early internet repo. (GitHub)
+
+1) Paste-in file contents
+README.md
+# shoegaze_style
+
+A modular style-system repo for **shoegaze-as-visual**: wall-of-texture, dreamy diffusion, nostalgic grain, and interference math where the subject dissolves into atmosphere.
+
+This repo treats shoegaze like an image behavior system:
+- **field > subject**
+- soft edges + low clarity
+- layered haze + bloom + grain
+- optional **interference** (moire / phase drift / beat bands)
+- memory materials (film halation, paper fiber, xerox ghosts, CRT smear)
+
+## Best use cases
+- image prompts (portraits, street night, album covers, abstract “sound-as-image” fields)
+- shader looks (bloom + grain + chroma bleed + interference)
+- style merges (dream pop, hauntology, vaporwave, glitch, op art)
+
+## Repo map
+- `00_foundation/` theory + invariants
+- `01_eras/` timeline flavors
+- `02_core_branches/` major sub-styles (standalone engines)
+- `03_visual_elements/` what you literally see (veils, boundaries, ghosts)
+- `04_materials_and_textures/` film/paper/signal matter
+- `05_motifs_and_objects/` recurring symbols and scenes
+- `06_composition_and_behavior/` how it behaves (dissolve rules)
+- `07_palettes/` fast palette packs
+- `08_prompt_modules/` modular prompt components + mega seeds
+- `09_style_merges/` crossover recipes
+- `10_reference_lists/` vocab hoards
+
+
+REPO_STRUCTURE.md
+# REPO_STRUCTURE
+
+shoegaze_style/
+├── README.md
+├── REPO_STRUCTURE.md
+├── STYLE_OVERVIEW.md
+├── QUICKSTART_PROMPTS.md
+├── TAGS_INDEX.md
+├── NEGATIVES.md
+├── CROSSOVER_RECIPES.md
+├── 00_foundation/
+├── 01_eras/
+├── 02_core_branches/
+├── 03_visual_elements/
+├── 04_materials_and_textures/
+├── 05_motifs_and_objects/
+├── 06_composition_and_behavior/
+├── 07_palettes/
+├── 08_prompt_modules/
+├── 09_style_merges/
+├── 10_reference_lists/
+└── 99_appendix/
+
+## Folder purposes (short)
+00_foundation: definitions, principles, invariants
+01_eras: era-flavors of haze + media
+02_core_branches: standalone shoegaze engines
+03_visual_elements: edges, veils, ghosts, smear
+04_materials_and_textures: film/paper/signal/iridescence
+05_motifs_and_objects: silhouettes, wet streets, album artifacts
+06_composition_and_behavior: field > subject, dissolve rules
+07_palettes: named palette families
+08_prompt_modules: modular prompt building blocks
+09_style_merges: recipes for mixing
+10_reference_lists: vocab hoards + reference targets
+99_appendix: naming rules + roadmap
+
+
+STYLE_OVERVIEW.md
+# STYLE_OVERVIEW
+
+## Definition
+`shoegaze_style` is a visual translation of “wall of sound” into **wall of atmosphere**:
+a subject implied through layers of haze, bloom, grain, and interference rather than crisp outlines.
+
+## Core identity (the invariants)
+1. Field > Subject
+   Texture and atmosphere are the protagonist; the subject can be partially lost.
+2. Soft Boundaries
+   Edges dissolve; clarity is intentionally low; detail is localized, not everywhere.
+3. Layer Stack
+   At least 3 layers: (a) haze/veil (b) bloom/halation (c) grain/texture.
+   Optional 4th: interference math (moire / phase drift / beat bands).
+4. Memory Materials
+   Film halation, paper fiber, xerox ghosts, CRT smear, light leaks.
+
+## Emotional spectrum
+- dreamy intimacy
+- romantic melancholy
+- nocturne glow
+- nostalgia / memory haze
+- overwhelm / immersion
+- serene abstraction
+- “silhouette in static” mystery
+
+## Materials
+- diffusion glow, halation
+- film grain clumps, dust & scratches
+- matte paper / zine / xerox residue
+- chromatic aberration / color bleed
+- fog volume, wet reflections
+- moire shimmer / phase drift interference
+
+## What kills the vibe
+- crisp outlines everywhere
+- clinical HDR, ultra-clarity
+- sterile modern product lighting
+- hyper-detailed “everything sharp” realism
+- flat clean vector sterility
+- overly readable poster typography
+
+
+NEGATIVES.md
+# NEGATIVES (what kills shoegaze)
+
+## Global negatives
+- ultra sharp, razor sharp, tack sharp
+- clinical HDR, hyper clarity, high micro-contrast
+- crisp outlines, hard edge everywhere
+- sterile studio lighting, polished product shot
+- clean vector art, flat design, corporate minimalism
+- “perfect gradients”, “perfectly clean”
+
+## Portrait-specific negatives
+- overdefined pores, hyper-detailed skin
+- hard rim light, beauty dish sharpness
+- plastic skin, too much clarity
+
+## Typography negatives (if doing album covers)
+- huge readable headline text
+- clean vector type, perfect kerning, modern brand identity
+- billboard poster composition
+
+
+QUICKSTART_PROMPTS.md (10 seeds, like your reference repo)
+# QUICKSTART_PROMPTS
+
+## 1. Shoegaze streetlight portrait
+A portrait under a sodium streetlight, face partially implied by haze, dreamy diffusion bloom, halation glow, film grain clumps, subtle chromatic aberration, background dissolving into atmospheric fog, wall-of-texture mood
+
+## 2. Wet asphalt nocturne
+A rainy night street scene, wet asphalt reflections, neon bleed, fog volume, soft focus lens, grain veil, highlight bloom, edges dissolving, romantic melancholy, immersive haze field
+
+## 3. Album-cover silhouette in static
+Minimal centered silhouette emerging from interference, beat-frequency bands, moire shimmer, paper fiber texture, subtle typography ghost (barely readable), matte print look, washed midtones, large negative space
+
+## 4. “Wall of sound” garden
+A flower field rendered like sound, layered petals as spectral bands, soft gradients, haze stack, light leaks, film halation, dream pop softness, texture dominates subject
+
+## 5. CRT bloom chapel
+A chapel interior lit by CRT glow, scanline haze, phosphor smear, grain and dust, soft focus, reverb-like trails, sacred atmosphere, edges melting into signal fog
+
+## 6. Xerox zine memory
+A zine-collage portrait: halftone residue, xerox ghosts, torn paper edges, misregistration, matte grain, bloom haze, nostalgic warmth, subject half-lost in print texture
+
+## 7. Oil-slick iridescent interference
+Abstract interference field with holographic oil-slick highlights, phase drift ripples, moire vibration, soft bloom, grain veil, implied form appears then dissolves
+
+## 8. Fogged-glass confession
+A figure behind fogged glass, condensation texture, diffusion glow, halation, soft silhouettes, low contrast rolloff, intimate melancholy, atmosphere-first composition
+
+## 9. Dusk field / negative space
+A tiny subject in vast dusk haze, large negative space, gentle vignette, soft focus, grainy sky gradients, texture field swallowing edges, quiet overwhelm
+
+## 10. Choir of harmonics (sound-as-image)
+A “harmonic ladder” landscape: luminous spectral columns, layered bands like overtones, soft bloom and grain, interference shimmer, subject implied by frequency geometry
+
+Your early internet repo uses this same “10 quickstart scenes” format as a practical entry point. (GitHub)
+
+TAGS_INDEX.md
+# TAGS_INDEX (search-friendly)
+
+## Core
+shoegaze, wall-of-texture, atmosphere-first, field-over-subject, dissolve-edges, soft-focus, low-clarity
+
+## Light
+halation, bloom, diffusion, light-leaks, fog-volume, sodium-glow, neon-bleed, dusk-haze
+
+## Texture
+film-grain, dust-scratches, matte-paper, xerox-ghosts, halftone-residue, print-memory
+
+## Interference math
+moire, phase-drift, beat-bands, alias-shimmer, standing-waves, signal-noise-veil
+
+## Composition
+negative-space, centered-minimal, silhouette-implied, texture-dominates, soft-vignette
+
+
+CROSSOVER_RECIPES.md
+# CROSSOVER_RECIPES (style merges)
+
+## Shoegaze x Dream Pop
+Add: pastel wash, airy glow, softer contrast, floral blur, “floaty light”
+Avoid: heavy glitch, harsh noise artifacts
+Use: haze_pastel palette + MODULE_lighting
+
+## Shoegaze x Hauntology
+Add: degraded media, archive dust, faded signage, tape-warp mood, ghost typography
+Use: sepia_zine palette + paper_xerox_zine textures
+
+## Shoegaze x Vaporwave
+Add: chrome gradients, mall afterlife lighting, neon fog, marble + plastic
+Keep shoegaze: still low-clarity + bloom + grain (don’t become clean 3D)
+
+## Shoegaze x Glitch / Noise
+Add: macroblock scars, alias stair-steps, datamosh smear, scanlines
+Rule: glitches should be “in the haze,” not crisp geometric UI
+
+
+2) The key trick: “Core Branches” = your repo’s engines
+02_core_branches/A_haze_bloom.md
+# A: HAZE + BLOOM (core shoegaze engine)
+
+## What it does
+Turns light into atmosphere: diffusion, halation, fog volume, soft rolloff.
+
+## Prompt stack
+shoegaze aesthetic, dreamy diffusion bloom, halation glow, soft focus lens, low micro-contrast, atmospheric fog volume
+
+## Good with
+portraits, street nocturnes, dusk landscapes, album covers
+
+## Don’t do
+ultra sharp lighting, hard rim edges, clarity everywhere
+
+02_core_branches/C_interference_math.md
+# C: INTERFERENCE MATH (beat bands / moiré / phase drift)
+
+## What it does
+Makes the subject implied by frequency geometry: shimmering moiré, standing-wave ripples, beat-frequency bands.
+
+## Prompt stack
+implied silhouette emerging from interference, moiré shimmer, phase drift, beat-frequency bands, aliasing glitter, signal noise veil
+
+## Rule
+Interference is the “guitar pedal”: it should smear into the haze, not sit on top as clean vector op-art.
+
+
+3) Plug-in “Prompt Modules” (what your style loader will love)
+08_prompt_modules/MODULE_core_stack.md
+# MODULE: core_stack
+
+shoegaze aesthetic, wall of texture, atmosphere-first, edges dissolving into haze,
+dreamy diffusion bloom, halation, film grain, subtle chromatic aberration,
+low micro-contrast, gentle vignette
+
+08_prompt_modules/MODULE_interference.md
+# MODULE: interference_math
+
+moire interference shimmer, phase drift ripples, beat-frequency bands,
+standing-wave geometry, alias shimmer, signal noise veil, implied form
+
+08_prompt_modules/MODULE_album_cover_layout.md
+# MODULE: album_cover_layout
+
+album cover design, centered minimal subject, large negative space,
+matte paper texture, subtle typography ghost (barely readable),
+washed midtones, texture field dominates
+
+
+4) If you want it even closer to your system
+The only thing I can’t infer from the repo alone is whether your loader expects:
+a style.json manifest, or
+just “markdown modules,” or
+a specific naming convention for modules / tags.
+If you paste one of your repo’s style-loader expectations (like a sample manifest file from another style repo you’re using), I’ll reshape this into your exact schema in one pass.
+But you don’t have to wait for that — the structure above already matches the reference repo’s philosophy and file grammar. (GitHub)
+Awesome—if your Copilot agent is going to unpack files, the best gift you can give it is:
+one canonical machine-readable manifest (YAML/JSON)
+small modular text blocks (prompt modules)
+a deterministic “prompt compiler” spec (so outputs are consistent)
+tests/fixtures (so the style doesn’t drift)
+Below is a complete SHOEGAZE_STYLE repo pack you can paste into your doc. It’s organized as:
+A. File tree
+B. Canonical manifest (YAML)
+C. Prompt modules (markdown/text)
+D. Model adapters (Midjourney / SDXL / Flux / generic)
+E. Shader mapping
+F. Tests + fixtures
+G. Agent instructions for unpacking
+Copy/paste as-is.
+
+A) Suggested repo tree
+shoegaze_style/
+  README.md
+  LICENSE
+  repo.meta.yaml
+
+  style/
+    shoegaze.style.yaml
+    shoegaze.lexicon.yaml
+    shoegaze.palettes.yaml
+    shoegaze.negatives.yaml
+    shoegaze.rules.md
+
+  modules/
+    00_core.md
+    01_light.md
+    02_texture.md
+    03_interference.md
+    04_composition.md
+    05_materials.md
+    06_typography_ghost.md
+    07_subject_behaviors.md
+    08_album_cover_layout.md
+
+  adapters/
+    adapter.generic.yaml
+    adapter.midjourney.yaml
+    adapter.sdxl.yaml
+    adapter.flux.yaml
+    adapter.comfyui.yaml
+
+  recipes/
+    quickstart_prompts.md
+    portraits.md
+    environments.md
+    abstract_sound_math.md
+    album_covers.md
+    crossovers.md
+
+  shaders/
+    mapping.yaml
+    glsl_notes.md
+
+  tests/
+    fixtures.yaml
+    prompt_expected.md
+    drift_checklist.md
+
+
+B) repo.meta.yaml
+repo:
+  id: shoegaze_style
+  name: "Shoegaze Style"
+  purpose: "Modular style pack for prompt systems + shader systems."
+  version: "1.0.0"
+  license: "MIT"
+  author: "YOUR_NAME"
+  entrypoints:
+    - style/shoegaze.style.yaml
+    - modules/00_core.md
+    - recipes/quickstart_prompts.md
+  recommended_read_order:
+    - README.md
+    - style/shoegaze.rules.md
+    - recipes/quickstart_prompts.md
+    - adapters/adapter.generic.yaml
+
+
+C) Canonical style manifest (the thing your apps load)
+style/shoegaze.style.yaml
+style:
+  id: shoegaze
+  name: "Shoegaze"
+  version: "1.0.0"
+  tags:
+    - atmospheric
+    - wall-of-texture
+    - haze
+    - bloom
+    - grain
+    - nostalgic
+    - interference
+    - dreamy
+    - field-over-subject
+
+  description: >
+    Visual translation of shoegaze music: "wall of sound" becomes "wall of atmosphere".
+    Subject dissolves into haze + bloom + grain; optional interference math implies form via patterns.
+
+  invariants:
+    - "Field > subject (texture is protagonist)."
+    - "Soft boundaries (low clarity, edges melt)."
+    - "Layer stack (haze + bloom + grain; optional interference)."
+    - "Memory materials (film halation, paper fiber, xerox ghosts, CRT smear)."
+
+  knobs:
+    # 0..1 normalized; adapters map to model params / shader params
+    intensity: 0.72
+    softness: 0.80
+    grain: 0.68
+    bloom: 0.74
+    interference: 0.52
+    contrast: 0.42
+    clarity: 0.25
+    color_bleed: 0.45
+    vignette: 0.28
+    nostalgia: 0.66
+
+  layers:
+    required:
+      - haze
+      - bloom
+      - grain
+    optional:
+      - interference
+      - print_memory
+      - signal_memory
+
+  prompt_grammar:
+    # Your compiler can treat these as ordered blocks
+    order:
+      - subject
+      - core
+      - light
+      - texture
+      - interference
+      - composition
+      - palette
+      - camera
+      - mood
+      - negatives
+
+    include_modules_default:
+      - modules/00_core.md
+      - modules/01_light.md
+      - modules/02_texture.md
+      - modules/04_composition.md
+      - modules/07_subject_behaviors.md
+
+    optional_modules:
+      - modules/03_interference.md
+      - modules/06_typography_ghost.md
+      - modules/08_album_cover_layout.md
+      - modules/05_materials.md
+
+  presets:
+    gentle_gaze:
+      knobs: { intensity: 0.60, softness: 0.72, grain: 0.55, bloom: 0.60, interference: 0.20, clarity: 0.32, contrast: 0.44, color_bleed: 0.30, vignette: 0.18, nostalgia: 0.60 }
+      module_overrides:
+        add: [modules/05_materials.md]
+        remove: [modules/03_interference.md]
+    heavy_gaze:
+      knobs: { intensity: 0.78, softness: 0.86, grain: 0.76, bloom: 0.82, interference: 0.55, clarity: 0.18, contrast: 0.38, color_bleed: 0.55, vignette: 0.30, nostalgia: 0.72 }
+      module_overrides:
+        add: [modules/03_interference.md, modules/05_materials.md]
+    total_wall:
+      knobs: { intensity: 0.92, softness: 0.92, grain: 0.88, bloom: 0.90, interference: 0.74, clarity: 0.12, contrast: 0.34, color_bleed: 0.70, vignette: 0.40, nostalgia: 0.80 }
+      module_overrides:
+        add: [modules/03_interference.md, modules/05_materials.md, modules/06_typography_ghost.md]
+
+
+D) Lexicon + negatives + palettes
+style/shoegaze.lexicon.yaml
+lexicon:
+  core:
+    - "shoegaze aesthetic"
+    - "wall of texture"
+    - "atmosphere-first"
+    - "edges dissolving into haze"
+    - "dreamy diffusion"
+    - "soft focus haze"
+    - "nostalgic grain veil"
+    - "memory-smeared light"
+
+  light:
+    - "halation glow"
+    - "diffusion bloom"
+    - "light leaks"
+    - "fog volume"
+    - "sodium vapor glow"
+    - "neon bleed"
+    - "washed midtones"
+    - "low contrast rolloff"
+
+  texture:
+    - "film grain clumps"
+    - "dust and scratches"
+    - "matte paper fiber"
+    - "xerox ghosting"
+    - "halftone residue"
+    - "smudged highlights"
+    - "soft micro-contrast"
+    - "tactile noise"
+
+  interference:
+    - "moire interference shimmer"
+    - "phase drift ripples"
+    - "standing-wave bands"
+    - "beat-frequency interference"
+    - "alias shimmer glitter"
+    - "signal noise veil"
+    - "pattern-implied silhouette"
+    - "geometric bleeding"
+
+  materials:
+    - "fogged glass"
+    - "wet asphalt reflections"
+    - "gauze diffusion fabric"
+    - "overprinted ink"
+    - "newsprint softness"
+    - "CRT phosphor smear"
+    - "VHS haze"
+    - "oil-slick iridescence"
+
+  composition:
+    - "field over subject"
+    - "large negative space"
+    - "centered minimal subject"
+    - "foreground haze layer"
+    - "texture dominates form"
+    - "soft vignette"
+    - "subject partially obscured"
+    - "depth haze stack"
+
+  camera:
+    - "diffusion filter"
+    - "soft-focus lens"
+    - "subtle chromatic aberration"
+    - "slight lens bloom"
+    - "low clarity"
+    - "gentle vignette"
+
+style/shoegaze.negatives.yaml
+negatives:
+  global:
+    - "ultra sharp"
+    - "razor sharp"
+    - "tack sharp"
+    - "clinical HDR"
+    - "high clarity"
+    - "hyper-detailed everywhere"
+    - "crisp outlines"
+    - "hard rim light"
+    - "sterile studio product photo"
+    - "clean vector art"
+    - "flat corporate illustration"
+    - "perfectly clean gradients"
+    - "over-processed clarity"
+
+  portrait:
+    - "overdefined pores"
+    - "plastic skin"
+    - "beauty dish sharpness"
+    - "hard edge makeup ad lighting"
+
+  typography:
+    - "large readable headline text"
+    - "clean vector typography"
+    - "poster design"
+    - "perfect kerning"
+
+style/shoegaze.palettes.yaml
+palettes:
+  haze_pastel:
+    notes: "dream-pop wash"
+    swatches: ["#F2D7E7", "#D7E7FF", "#DDEEDB", "#F7F0C8", "#C9C0D8"]
+
+  nocturne_neon:
+    notes: "night haze + neon bleed"
+    swatches: ["#0B1020", "#1C2A4A", "#FF4FD8", "#59D7FF", "#FFD26A"]
+
+  sepia_zine:
+    notes: "xerox nostalgia"
+    swatches: ["#1B1A17", "#3A332E", "#B59B7D", "#E6D7C7", "#8C7A6B"]
+
+  cd_iridescent:
+    notes: "holographic oil-slick highlights"
+    swatches: ["#8AF7FF", "#FF7AF2", "#FFF07A", "#7AFF9E", "#B58CFF"]
+
+style/shoegaze.rules.md
+# Shoegaze Rules (non-negotiables)
+
+## The 4 invariants
+1) FIELD > SUBJECT  
+Texture and atmosphere lead; subject can be partially lost.
+
+2) SOFT BOUNDARIES  
+Edges melt. Sharpness is localized (if at all), never global.
+
+3) LAYER STACK  
+Minimum three layers: haze/veil + bloom/halation + grain/texture.  
+Optional: interference math (moire/phase drift/beat bands).
+
+4) MEMORY MATERIALS  
+Your image should feel "recorded" not "rendered": film, paper, xerox, CRT/VHS.
+
+## The “Shoegaze Test”
+If you blur the image slightly and it *still works*, you’re in shoegaze territory.
+
+## Common failure modes
+- Too crisp: looks like modern editorial.
+- Too clean: no tactile noise / no memory.
+- Glitch too graphic: interference reads as vector overlay; must fuse into haze.
+
+
+E) Prompt modules (tiny, composable)
+Each module is written as “comma-separated spell blocks” so your compiler can paste them.
+modules/00_core.md
+shoegaze aesthetic, wall of texture, atmosphere-first, edges dissolving into haze, subject dissolves into texture field
+
+modules/01_light.md
+dreamy diffusion bloom, halation glow, light leaks, fog volume, washed midtones, low contrast rolloff
+
+modules/02_texture.md
+film grain clumps, dust and scratches, matte paper fiber, tactile noise, soft micro-contrast, smudged highlights
+
+modules/03_interference.md
+moire interference shimmer, phase drift ripples, beat-frequency bands, standing-wave geometry, alias shimmer, pattern-implied silhouette
+
+modules/04_composition.md
+field over subject, large negative space, foreground haze layer, depth haze stack, texture dominates form, gentle vignette
+
+modules/05_materials.md
+fogged glass, wet asphalt reflections, gauze diffusion fabric, overprinted ink, xerox ghosting, CRT phosphor smear
+
+modules/06_typography_ghost.md
+subtle typography ghost, barely readable text remnants, archival caption fragments, smeared ink letters, faded stamp marks
+
+modules/07_subject_behaviors.md
+face partially implied by haze, edges melt into background, form emerges then dissolves, silhouette in static, memory-smeared contours
+
+modules/08_album_cover_layout.md
+album cover design, centered minimal subject, large negative space, matte print look, subtle text ghost, texture field dominates
+
+
+F) Adapters (map knobs → model params)
+These are intentionally simple so you can expand later.
+adapters/adapter.generic.yaml
+adapter:
+  id: generic
+  notes: "Generic text-to-image prompt compiler."
+
+  compile:
+    joiner: ", "
+    include_negatives: true
+    negative_prefix: "--no "
+
+  knob_to_language:
+    softness:
+      low: ["slightly soft focus"]
+      mid: ["soft focus"]
+      high: ["dreamy diffusion, heavy soft focus"]
+    grain:
+      low: ["fine film grain"]
+      mid: ["film grain"]
+      high: ["heavy grain clumps, dust and scratches"]
+    bloom:
+      low: ["subtle bloom"]
+      mid: ["diffusion bloom, halation"]
+      high: ["strong halation glow, blown bloom"]
+    interference:
+      low: ["subtle shimmer"]
+      mid: ["moire shimmer, phase drift"]
+      high: ["strong moire interference, beat-frequency bands"]
+    clarity:
+      low: ["low clarity"]
+      mid: ["reduced clarity"]
+      high: ["(avoid)"]
+
+  palette_injection:
+    format: "palette: {palette_name}"
+
+adapters/adapter.midjourney.yaml
+adapter:
+  id: midjourney
+  notes: "Midjourney-style suffix params are optional; keep prompt poetic + modular."
+
+  mj_params:
+    stylize:
+      gentle_gaze: 300
+      heavy_gaze: 700
+      total_wall: 1000
+    chaos:
+      gentle_gaze: 5
+      heavy_gaze: 12
+      total_wall: 20
+
+  compile:
+    suffix_template: "--stylize {stylize} --chaos {chaos}"
+
+adapters/adapter.sdxl.yaml
+adapter:
+  id: sdxl
+  notes: "SDXL likes explicit negatives; keep modules but reduce redundancy."
+  compile:
+    include_negatives: true
+    negative_separator: ", "
+  hints:
+    sampler: "DPM++ 2M (example)"
+    cfg: "5-8 (example)"
+
+adapters/adapter.flux.yaml
+adapter:
+  id: flux
+  notes: "Flux responds well to concise style stacks; avoid over-long negatives."
+  compile:
+    max_tokens_hint: 250
+
+adapters/adapter.comfyui.yaml
+adapter:
+  id: comfyui
+  notes: "Treat modules as separate nodes; core/light/texture/interference as toggles."
+  node_suggestions:
+    - "Prompt Combine: subject + modules"
+    - "Negative Prompt: shoegaze.negatives"
+    - "Optional: Film Grain / Bloom post nodes"
+
+
+G) Recipes (prompt packs)
+recipes/quickstart_prompts.md
+# Quickstart Prompts (copy/paste)
+
+## 1) Portrait: Gentle Gaze
+{SUBJECT}, shoegaze aesthetic, dreamy diffusion bloom, halation glow, film grain, fog volume, soft focus, face partially implied by haze, field over subject, haze_pastel
+NEG: ultra sharp, clinical HDR, crisp outlines
+
+## 2) Portrait: Heavy Gaze
+{SUBJECT}, wall of texture, strong halation, heavy grain clumps, subtle chromatic aberration, neon bleed, wet reflections, edges dissolve into haze, nocturne_neon, moire shimmer
+NEG: tack sharp, hard rim light, hyper-detailed pores
+
+## 3) Abstract: Sound-as-Image (Total Wall)
+{CONCEPT}, implied silhouette emerging from interference, beat-frequency bands, phase drift, moire shimmer, standing-wave geometry, oil-slick iridescence, grain veil, texture field dominates, cd_iridescent
+NEG: clean vector lines, perfect symmetry, sterile gradients
+
+## 4) Album Cover
+album cover design, {SUBJECT}, centered minimal subject, large negative space, matte paper fiber, subtle typography ghost, washed midtones, shoegaze aesthetic, sepia_zine
+NEG: big readable text, clean vector typography
+
+recipes/abstract_sound_math.md (your “math of sound” playground)
+# Sound-as-Image: Math Engines
+
+Use one engine + the shoegaze core stack.
+
+## Engine: Harmonic Ladder (additive)
+harmonic ladder, spectral columns, overtone ribs, smooth banded gradients, cathedral-like resonance
+
+## Engine: Granular Cloud
+particle swarm texture, grain cloud, micro-event glitter, stochastic shimmer fog, pointillist haze
+
+## Engine: FM Sidebands
+spectral comb lattice, sideband ribs, metallic crystal harmonics, insect-wing geometry, abrupt complexity spikes
+
+## Engine: Polyrhythm Lattice
+phase-offset grids, rotating mandala pulses, rhythmic tiling, clockwork rosettes, interlocking cycles
+
+## Engine: Convolution Reverb Ghosts
+impulse-response trails, temporal smears, echo halos, reverb fog volume, ghost bands
+
+## Master template
+{ENGINE}, shoegaze aesthetic, wall of texture, dreamy diffusion bloom, halation glow, film grain clumps, edges dissolving into haze, {PALETTE}
+NEG: crisp outlines, clinical HDR, clean vector art
+
+
+H) Shader mapping (so “shoegaze” drives your visual stack)
+shaders/mapping.yaml
+shader_mapping:
+  knobs_to_params:
+    softness:
+      - gaussian_blur_radius
+      - bilateral_sigma
+    grain:
+      - film_grain_amount
+      - grain_scale
+    bloom:
+      - bloom_threshold
+      - bloom_intensity
+    interference:
+      - moire_strength
+      - scanline_strength
+      - phase_warp
+    contrast:
+      - tonecurve_contrast
+    clarity:
+      - local_contrast
+    color_bleed:
+      - chromatic_aberration
+      - color_fringe
+    vignette:
+      - vignette_amount
+
+  presets:
+    gentle_gaze:
+      gaussian_blur_radius: 0.35
+      film_grain_amount: 0.45
+      bloom_intensity: 0.40
+      moire_strength: 0.10
+      chromatic_aberration: 0.12
+      local_contrast: 0.30
+      tonecurve_contrast: 0.42
+      vignette_amount: 0.20
+
+    heavy_gaze:
+      gaussian_blur_radius: 0.55
+      film_grain_amount: 0.70
+      bloom_intensity: 0.62
+      moire_strength: 0.30
+      chromatic_aberration: 0.25
+      local_contrast: 0.18
+      tonecurve_contrast: 0.38
+      vignette_amount: 0.32
+
+    total_wall:
+      gaussian_blur_radius: 0.70
+      film_grain_amount: 0.85
+      bloom_intensity: 0.78
+      moire_strength: 0.45
+      chromatic_aberration: 0.35
+      local_contrast: 0.12
+      tonecurve_contrast: 0.34
+      vignette_amount: 0.40
+
+shaders/glsl_notes.md
+# GLSL Notes for Shoegaze
+
+Shoegaze look = 3-stage minimum:
+1) soft diffusion (blur/bilateral)
+2) bloom/halation (thresholded blur add)
+3) texture memory (grain + dust + paper)
+
+Optional 4) interference math:
+- moire via overlaying rotated/scaled grids
+- phase warp via sin-based UV perturb
+- alias shimmer via quantized sampling + dither (subtle!)
+
+Rule: interference must live INSIDE haze, not on top as crisp UI.
+
+
+I) Tests (keep it from drifting over time)
+tests/fixtures.yaml
+tests:
+  - name: portrait_gentle
+    subject: "a singer under a streetlight"
+    preset: gentle_gaze
+    palette: haze_pastel
+    include_modules:
+      - modules/00_core.md
+      - modules/01_light.md
+      - modules/02_texture.md
+      - modules/04_composition.md
+      - modules/07_subject_behaviors.md
+    must_include:
+      - "shoegaze aesthetic"
+      - "halation"
+      - "film grain"
+      - "soft focus"
+    must_exclude:
+      - "ultra sharp"
+      - "clinical HDR"
+
+  - name: abstract_total_wall
+    subject: "a human silhouette implied by beat-frequency interference"
+    preset: total_wall
+    palette: cd_iridescent
+    include_modules:
+      - modules/00_core.md
+      - modules/01_light.md
+      - modules/02_texture.md
+      - modules/03_interference.md
+      - modules/04_composition.md
+    must_include:
+      - "beat-frequency"
+      - "moire"
+      - "phase drift"
+    must_exclude:
+      - "clean vector"
+
+tests/drift_checklist.md
+# Drift Checklist (run whenever you add tokens)
+
+- Does the style still pass the Shoegaze Test? (blur it slightly; still works)
+- Are edges dissolving, not outlined?
+- Is texture leading, not accessory?
+- Is there at least one memory material (film/paper/signal)?
+- If interference is present: is it fused into haze (not crisp overlay)?
+- Negatives still remove "clinical HDR / ultra sharp" vibes?
+
+
+J) README (practical + agent-friendly)
+README.md
+# Shoegaze Style
+
+Shoegaze-as-visual: wall-of-texture, dreamy diffusion, nostalgic grain, optional interference math.
+
+## Use it in 20 seconds
+1) Pick a preset: gentle_gaze / heavy_gaze / total_wall
+2) Provide a subject
+3) Compile: subject + modules + palette + negatives
+
+## Entrypoints
+- style/shoegaze.style.yaml (canonical)
+- recipes/quickstart_prompts.md (copy/paste prompts)
+- shaders/mapping.yaml (shader knobs)
+
+## Modules (toggles)
+- Core / Light / Texture / Composition (default on)
+- Interference / Materials / Typography / Album Layout (optional)
+
+## Golden rules
+Field > subject, soft boundaries, layer stack, memory materials.
+
+
+K) Instructions for your Copilot agent (to unpack cleanly)
+Put this in your doc too so the agent has marching orders:
+# Agent unpack instructions
+
+Goal: create all files in the repo tree exactly as specified.
+
+Steps:
+1) Create directories: style/, modules/, adapters/, recipes/, shaders/, tests/
+2) For each filename block in the doc, write the content verbatim.
+3) Ensure YAML is valid (2-space indentation, no tabs).
+4) No smart “fixes” unless YAML fails parsing; if it fails, fix minimal characters only.
+5) Keep module files as single-line comma-separated prompt tokens (markdown files allowed).
+6) Commit message suggestion: "Add shoegaze style pack v1.0.0"
+
+Validation:
+- Confirm repo.meta.yaml exists
+- Confirm style/shoegaze.style.yaml references module paths that exist
+- Confirm tests/fixtures.yaml references module files that exist
+
+
+If you want to level this up one notch: tell me the exact API shape your vibecoded apps expect (even a tiny snippet like style = {name, tokens[], negatives[]}), and I’ll emit a second manifest that matches your runtime exactly (plus a tiny “compiler” pseudocode file your agent can implement).
+No problem—let’s choose an API shape that’s dead simple, future-proof, and easy for Copilot to wire into anything.
+Here’s the best “style repo contract” I’ve seen work across prompt apps + shader apps:
+One canonical file: style/style.json
+Everything else optional: modules, recipes, palettes, shaders, tests
+A tiny “compiler” rule: concatenate blocks in order, add negatives
+So you can load one JSON and be done.
+Below is a minimal-but-powerful contract + the shoegaze implementation. Your agent can create the rest later, but this alone will run.
+
+The Simple Style Contract (what your apps can expect)
+style/style.json (canonical)
+{
+  "id": "shoegaze",
+  "name": "Shoegaze",
+  "version": "1.0.0",
+  "description": "Wall-of-texture visuals: haze+bloom+grain, optional interference. Mood over clarity.",
+  "tags": ["atmospheric", "haze", "bloom", "grain", "nostalgic", "interference", "field-over-subject"],
+
+  "blocks": {
+    "core": [
+      "shoegaze aesthetic",
+      "wall of texture",
+      "atmosphere-first",
+      "edges dissolving into haze",
+      "subject dissolves into texture field"
+    ],
+    "light": [
+      "dreamy diffusion bloom",
+      "halation glow",
+      "light leaks",
+      "fog volume",
+      "washed midtones",
+      "low contrast rolloff"
+    ],
+    "texture": [
+      "film grain clumps",
+      "dust and scratches",
+      "matte paper fiber",
+      "tactile noise",
+      "soft micro-contrast",
+      "smudged highlights"
+    ],
+    "interference": [
+      "moire interference shimmer",
+      "phase drift ripples",
+      "beat-frequency bands",
+      "standing-wave geometry",
+      "alias shimmer",
+      "pattern-implied silhouette"
+    ],
+    "composition": [
+      "field over subject",
+      "large negative space",
+      "foreground haze layer",
+      "depth haze stack",
+      "texture dominates form",
+      "gentle vignette"
+    ],
+    "camera": [
+      "diffusion filter",
+      "soft-focus lens",
+      "subtle chromatic aberration",
+      "low clarity"
+    ],
+    "mood": [
+      "romantic melancholy",
+      "immersive atmosphere",
+      "nostalgic dreaminess"
+    ]
+  },
+
+  "defaults": {
+    "enabledBlocks": ["core", "light", "texture", "composition", "camera", "mood"],
+    "optionalBlocks": ["interference"]
+  },
+
+  "negatives": [
+    "ultra sharp",
+    "razor sharp",
+    "tack sharp",
+    "clinical HDR",
+    "high clarity",
+    "hyper-detailed everywhere",
+    "crisp outlines",
+    "hard rim light",
+    "sterile studio product photo",
+    "clean vector art",
+    "perfectly clean gradients",
+    "over-processed clarity"
+  ],
+
+  "palettes": {
+    "haze_pastel": {
+      "notes": "dream-pop wash",
+      "swatches": ["#F2D7E7", "#D7E7FF", "#DDEEDB", "#F7F0C8", "#C9C0D8"]
+    },
+    "nocturne_neon": {
+      "notes": "night haze + neon bleed",
+      "swatches": ["#0B1020", "#1C2A4A", "#FF4FD8", "#59D7FF", "#FFD26A"]
+    },
+    "sepia_zine": {
+      "notes": "xerox nostalgia",
+      "swatches": ["#1B1A17", "#3A332E", "#B59B7D", "#E6D7C7", "#8C7A6B"]
+    },
+    "cd_iridescent": {
+      "notes": "holographic oil-slick highlights",
+      "swatches": ["#8AF7FF", "#FF7AF2", "#FFF07A", "#7AFF9E", "#B58CFF"]
+    }
+  },
+
+  "presets": {
+    "gentle_gaze": {
+      "enabledBlocks": ["core", "light", "texture", "composition", "camera", "mood"],
+      "optionalBlocks": [],
+      "palette": "haze_pastel"
+    },
+    "heavy_gaze": {
+      "enabledBlocks": ["core", "light", "texture", "composition", "camera", "mood", "interference"],
+      "optionalBlocks": [],
+      "palette": "nocturne_neon"
+    },
+    "total_wall": {
+      "enabledBlocks": ["core", "light", "texture", "interference", "composition", "camera", "mood"],
+      "optionalBlocks": [],
+      "palette": "cd_iridescent"
+    }
+  },
+
+  "shader": {
+    "knobs": ["softness", "grain", "bloom", "interference", "contrast", "clarity", "color_bleed", "vignette"],
+    "presets": {
+      "gentle_gaze": { "softness": 0.72, "grain": 0.55, "bloom": 0.60, "interference": 0.20, "contrast": 0.44, "clarity": 0.32, "color_bleed": 0.30, "vignette": 0.18 },
+      "heavy_gaze":  { "softness": 0.86, "grain": 0.76, "bloom": 0.82, "interference": 0.55, "contrast": 0.38, "clarity": 0.18, "color_bleed": 0.55, "vignette": 0.30 },
+      "total_wall":  { "softness": 0.92, "grain": 0.88, "bloom": 0.90, "interference": 0.74, "contrast": 0.34, "clarity": 0.12, "color_bleed": 0.70, "vignette": 0.40 }
+    }
+  },
+
+  "compiler": {
+    "joiner": ", ",
+    "negativePrefix": "--no ",
+    "order": ["subject", "core", "light", "texture", "interference", "composition", "camera", "mood", "palette", "negatives"],
+    "paletteFormat": "palette:{palette}"
+  }
+}
+
+That file alone gives you:
+prompt tokens
+defaults + presets
+palettes
+negatives
+shader params
+a compile rule
+
+Tiny compiler pseudocode (drop anywhere)
+compiler/prompt_compiler.md
+Given:
+- subject (string)
+- style.json (loaded)
+- presetName (optional)
+- enabledBlocks override (optional)
+- palette override (optional)
+
+1) Choose config:
+   if presetName: use style.presets[presetName]
+   else use style.defaults
+
+2) Build parts:
+   parts = [subject]
+   for blockName in enabledBlocks:
+       parts += style.blocks[blockName]
+
+3) Add palette token:
+   palette = preset.palette or override
+   if palette: parts += [style.compiler.paletteFormat.replace("{palette}", palette)]
+
+4) Join:
+   prompt = parts.join(style.compiler.joiner)
+
+5) Negatives:
+   neg = style.negatives.join(", ")
+   prompt += " " + style.compiler.negativePrefix + neg
+
+Return prompt.
+
+
+How you use it (examples)
+Gentle portrait
+subject: portrait of a girl under a streetlight
+preset: gentle_gaze
+Abstract sound-math
+subject: silhouette implied by beat-frequency interference
+preset: total_wall
+If you want more chaos
+just add block interference manually or swap preset.
+
+One more “nice” file: recipes/quickstart.txt
+[gentle_gaze]
+portrait of a girl under a streetlight
+
+[heavy_gaze]
+rainy night street, wet asphalt reflections
+
+[total_wall]
+human silhouette implied by beat-frequency interference
+
+Your agent can parse bracket headers and generate compiled prompts for demos.
+
+If this sparks you, next knock on →
+“hauntology_style” (lost futures) or “granular_synthesis_style” (particle-wall sound-as-image) — both plug into this exact contract.
+Got you. I’m going to keep expanding the SHOEGAZE style pack in the same “repo-contract” spirit—more blocks, more presets, more recipes, and some precision knobs so your apps + shader toys can really “play the pedals.”
+Everything below is copy/paste-ready. You can treat it as additions to style/style.json plus a few new optional files.
+
+1) Expand style/style.json with more blocks + smarter presets
+Add these NEW blocks under "blocks" (keep existing ones)
+{
+  "blocks": {
+    "veil_layers": [
+      "foreground haze veil",
+      "midground diffusion mist",
+      "background atmosphere wash",
+      "soft occlusion fog",
+      "transparent texture layers"
+    ],
+    "print_memory": [
+      "newsprint softness",
+      "halftone ghost dots",
+      "ink bleed edges",
+      "misregistration drift",
+      "xerox generation loss"
+    ],
+    "signal_memory": [
+      "CRT bloom",
+      "scanline haze",
+      "phosphor smear",
+      "VHS noise veil",
+      "codec scars (subtle)"
+    ],
+    "chromatics": [
+      "pastel chroma wash",
+      "subtle color bleed",
+      "milky highlights",
+      "muted midtones",
+      "iridescent oil-slick highlights (optional)"
+    ],
+    "motion_time": [
+      "long-exposure smear",
+      "time-lag ghosting",
+      "reverb-like trails",
+      "slow shutter glow",
+      "temporal echo bands"
+    ],
+    "weather_space": [
+      "misty dusk air",
+      "overcast softness",
+      "rain haze",
+      "humid night glow",
+      "atmospheric perspective"
+    ],
+    "subject_archetypes": [
+      "silhouette in static",
+      "face implied by texture",
+      "figure half-absorbed into fog",
+      "hands emerging from grain",
+      "eyes as the only sharp detail"
+    ],
+    "album_artifacts": [
+      "matte sleeve texture",
+      "faded liner-note fragments",
+      "subtle spine text ghost",
+      "creased cover wear",
+      "archival sticker residue"
+    ],
+    "typography_whispers": [
+      "barely readable text remnants",
+      "smeared caption fragments",
+      "overprinted letters",
+      "faded stamp marks",
+      "ghost typography, not headline"
+    ],
+    "lens_defects": [
+      "lens haze",
+      "soft flare bloom",
+      "chromatic aberration",
+      "slight focus breathing",
+      "edge softness falloff"
+    ]
+  }
+}
+
+Update "defaults" to include optional sets
+{
+  "defaults": {
+    "enabledBlocks": ["core", "light", "texture", "composition", "camera", "mood", "veil_layers"],
+    "optionalBlocks": ["interference", "print_memory", "signal_memory", "chromatics", "motion_time", "weather_space"]
+  }
+}
+
+Add NEW presets under "presets" (these are fun flavors)
+{
+  "presets": {
+    "zine_haze": {
+      "enabledBlocks": ["core", "light", "texture", "composition", "camera", "mood", "print_memory", "album_artifacts"],
+      "optionalBlocks": ["typography_whispers"],
+      "palette": "sepia_zine"
+    },
+    "crt_reverb": {
+      "enabledBlocks": ["core", "light", "texture", "composition", "camera", "mood", "signal_memory", "motion_time"],
+      "optionalBlocks": ["interference"],
+      "palette": "nocturne_neon"
+    },
+    "pastel_wash": {
+      "enabledBlocks": ["core", "light", "texture", "composition", "camera", "mood", "chromatics", "veil_layers"],
+      "optionalBlocks": [],
+      "palette": "haze_pastel"
+    },
+    "sodium_melancholy": {
+      "enabledBlocks": ["core", "light", "texture", "composition", "camera", "mood", "weather_space", "veil_layers"],
+      "optionalBlocks": ["interference"],
+      "palette": "nocturne_neon"
+    },
+    "iridescent_interference": {
+      "enabledBlocks": ["core", "light", "texture", "interference", "composition", "camera", "mood", "chromatics"],
+      "optionalBlocks": ["motion_time"],
+      "palette": "cd_iridescent"
+    }
+  }
+}
+
+
+2) Add “micro-prompts” (your style repo’s cheat-code vocabulary)
+Create a new optional file: recipes/micro_prompts.md
+# Micro Prompts (Shoegaze DNA snippets)
+
+Use these as tiny add-ons anywhere.
+
+## Edge behavior
+- edges dissolving into haze
+- boundaries softened, subject merges with background
+- detail only where it matters (eyes / highlight / single object)
+
+## Texture stack
+- haze veil + halation + grain veil
+- dust/scratches + matte paper fiber
+- xerox generation loss + misregistration drift
+
+## Light behavior
+- milky highlights
+- sodium glow + wet reflections
+- neon bleed through fog
+
+## “Sound math” behavior
+- beat-frequency interference bands
+- phase drift shimmer
+- standing-wave ripples implying form
+
+## Album-cover behavior
+- centered minimal subject, huge negative space
+- subtle typography ghost (not readable)
+- sleeve wear + sticker residue + crease marks
+
+
+3) A bigger Quickstart pack (25 prompts, sorted by use)
+Create: recipes/quickstart_25.md
+# Quickstart 25 (Shoegaze)
+
+## Portraits (1–8)
+1) portrait of {person}, eyes sharp only, everything else dissolves into haze, shoegaze aesthetic, halation glow, film grain
+2) {person} behind fogged glass, condensation texture, dreamy bloom, dust and scratches, nostalgic grain veil
+3) close-up face implied by texture field, smudged highlights, low contrast rolloff, soft focus lens, gentle vignette
+4) {person} with gauze diffusion fabric in foreground, light leaks, matte paper fiber, romantic melancholy
+5) backlit silhouette, hair as soft halo, washed midtones, halation glow, edges melt into fog volume
+6) candid portrait, long-exposure smear, time-lag ghosting, grain clumps, neon bleed through haze
+7) portrait like a photocopied zine, halftone residue, misregistration drift, xerox ghosts, sleeve-wear texture
+8) dream-pop portrait, pastel wash, milky highlights, diffusion bloom, low clarity, gentle glow
+
+## Environments (9–16)
+9) rainy night street, wet asphalt reflections, sodium glow, fog volume, film grain clumps, neon bleed
+10) empty parking lot at dusk, large negative space, haze veil layers, washed midtones, gentle vignette
+11) suburban night, streetlights in mist, soft bloom, grain veil, edges dissolve, quiet overwhelm
+12) forest path in overcast fog, atmospheric perspective, tactile noise, soft focus, matte palette
+13) seaside at twilight, haze wash, halation glow, low contrast, memory-like softness
+14) bedroom lit by monitor glow, CRT bloom, scanlines, phosphor smear, nostalgic noise veil
+15) hallway liminal scene, fog volume, dust and scratches, soft diffusion, subtle interference shimmer
+16) rooftop neon haze, long exposure trails, reverb-like glow, chromatic aberration, grain clumps
+
+## Abstract / Sound-as-Image (17–22)
+17) human silhouette implied by beat-frequency interference, moire shimmer, phase drift ripples, grain veil, halation
+18) harmonic ladder landscape: spectral columns, overtone ribs, smooth banded gradients, shoegaze haze stack
+19) granular cloud field: particle swarm texture, micro-event glitter, stochastic shimmer fog, edges dissolve
+20) FM sideband crystals: spectral comb lattice, metallic bloom, abrupt complexity spikes, soft diffusion haze
+21) standing-wave mandalas hidden inside fog, interference patterns fused into atmosphere, not crisp overlays
+22) oil-slick iridescent interference field, holographic highlights, moire vibration, texture dominates form
+
+## Album Covers (23–25)
+23) album cover design, centered minimal subject dissolving into texture field, matte sleeve texture, subtle typography ghost
+24) sleeve-worn cover with sticker residue, faded liner-note fragments, washed midtones, film grain, negative space
+25) abstract shoegaze cover: interference silhouette, halftone residue, paper fiber, barely readable caption fragments
+
+
+4) A “prompt compiler” enhancement: block weights + toggles
+If you want your apps to support “how shoegaze is this?”, add a weights section.
+Add under root of style.json
+{
+  "weights": {
+    "core": 1.0,
+    "light": 0.9,
+    "texture": 0.9,
+    "composition": 0.8,
+    "camera": 0.6,
+    "mood": 0.5,
+    "veil_layers": 0.7,
+    "interference": 0.6,
+    "print_memory": 0.6,
+    "signal_memory": 0.5,
+    "chromatics": 0.4,
+    "motion_time": 0.4,
+    "weather_space": 0.4,
+    "typography_whispers": 0.3,
+    "album_artifacts": 0.3,
+    "lens_defects": 0.5
+  }
+}
+
+Then your compiler can do: include block if weight <= intensity or scale repetition by weight. Even if you never implement it, it’s a nice roadmap.
+
+5) Add “anti-patterns” and fixes (very practical)
+Create: style/anti_patterns.md
+# Shoegaze Anti-Patterns (and fixes)
+
+## Too crisp / modern editorial
+Symptoms: sharp edges everywhere, clean studio light, looks like a tech ad.
+Fix: add haze veil layers + low contrast rolloff + film grain clumps + halation glow.
+Add negatives: ultra sharp, clinical HDR, crisp outlines.
+
+## Glitch looks like a vector overlay
+Symptoms: moire is too clean, reads like op-art sticker.
+Fix: fuse interference into haze: add "grain veil", "fog volume", "smudged highlights", "soft focus lens".
+Rule: interference must be *inside* atmosphere.
+
+## Texture everywhere, no focal anchor
+Symptoms: it’s just noise, nothing to feel.
+Fix: “single sharp detail” rule: eyes, a streetlight, one highlight edge—everything else dissolves.
+
+## Too brown / muddy
+Symptoms: flat mud, no shimmer.
+Fix: add chromatics: milky highlights, subtle color bleed, pastel wash OR neon bleed.
+
+
+6) Shader side: add a “pedalboard” concept
+Create: shaders/pedalboard.md
+# Shoegaze Pedalboard (shader mental model)
+
+## Pedals (order matters)
+1) Diffusion (softness)
+2) Bloom / Halation (bloom)
+3) Memory Texture (grain + dust + paper)
+4) Color Bleed (chroma aberration)
+5) Interference (moire/phase warp) [optional]
+6) Vignette (gentle)
+
+## Rule
+If you can toggle only 3 things:
+- diffusion
+- halation
+- grain
+…you still have shoegaze.
+
+## A/B
+- Gentle gaze: low interference, high diffusion
+- Heavy gaze: higher bloom + grain, moderate interference
+- Total wall: strong diffusion + bloom + grain + interference
+
+
+7) More “shoegaze-like” sibling tags (for cross-style search)
+Add to style.json under a new key:
+{
+  "siblings": [
+    "dream_pop",
+    "ethereal_wave",
+    "pictorialism",
+    "hauntology",
+    "slowcore",
+    "zine_xeroxcore",
+    "analog_video_synth",
+    "op_art_interference"
+  ]
+}
+
+
+8) Extra palettes (because palettes are half the vibe)
+Add these under "palettes":
+{
+  "palettes": {
+    "sodium_fog": {
+      "notes": "streetlight mist, warm glow + deep night",
+      "swatches": ["#0A0F18", "#1B2A3A", "#F6B45A", "#FFD7A1", "#7A8CA5"]
+    },
+    "milkglass": {
+      "notes": "milky highlights + soft neutrals",
+      "swatches": ["#F3F0EA", "#D9D5CF", "#B7B0A7", "#8C8680", "#3A3A3A"]
+    },
+    "bruise_bloom": {
+      "notes": "romantic melancholy, deep purples + faded pinks",
+      "swatches": ["#120A1A", "#2A163A", "#6B3FA0", "#E2A3C8", "#A3B8FF"]
+    }
+  }
+}
+
+
+9) Add a “single-file mini” for ultra portability
+If you ever want a one-file style repo, create:
+shoegaze.stylepack.json (just duplicate style/style.json content here)
+Your apps can load either style/style.json or the root file—super convenient.
+
+Keep going direction: which lane do you want next?
+Pick one and I’ll expand it hard (with more blocks, recipes, and tests):
+Album cover engine (typography ghosts, layout rules, sleeve artifacts)
+Sound-as-image engine (harmonics, granular, polyrhythm lattices, phase portraits)
+Shoegaze portraits (skin-safe softness, focal anchors, haze stacking)
+Shader pedalboard (actual GLSL-ish pseudocode blocks + parameter curves)
+Say the number (or “all”), and I’ll keep filling the repo.
+Here’s what I did with the repo and what’s still open for expansion.
+What the repo already covers
+From the current structure and content, the project is already a pretty complete 1960–2000 fashion style database for AI prompting:
+Core style data
+styles_index.yaml holds 28 fully specified style movements with ids, years, origin, influences, decomposed parts, short prompt tokens, and visual_examples pointing at museum/archives.
+styles/ has a matching markdown file for each movement (beatnik couture, mod, punk, goth, grunge, Y2K, etc.), so every entry in the index has a human‑readable reference.
+Context and wiring
+decades/1960s.md … 1990s.md give decade‑level overviews and style maps so you can situate looks in time.
+meta/influence_graph.md spells out historically grounded hybrids (punk + deconstruction, mod + space age, hip‑hop + preppy, rave + skate, etc.).
+meta/timeline.md maps which styles are active when, for year‑accurate prompts.
+meta/sources.md lists institutional references (FIT, Met, V&A, Museum of Youth Culture, NMAAHC, MoPOP, etc.).
+Schema and vocab
+vocab/schema.yaml defines a clean StyleMovement schema (id, label, years, origin, influences, parts, designers_brands, figures_media, tokens, visual_examples), which styles_index.yaml is following.
+vocab/tokens.yaml gives shared vocab for silhouettes, materials, patterns/motifs, accessories/footwear, grooming, and settings, tuned for direct prompt injection.
+Automation hooks
+.github/agents/finisher.agent.md defines a “style‑repo‑completionist” Copilot agent for turning bare style repos into structured documentation (history, characteristics, palettes, etc.), which you can use on other style‑focused projects.
+Net: the repo already nails historical coverage, structure, and prompt‑ready decomposition for clothing and subcultural looks; the main missing layer was “how do I actually use this and extend it?” as well as a few camera/lighting tokens for image/video models.
+What I decided should be added
+Based on what’s there, I focused on additions that:
+Make it easier for you or collaborators to add new styles without breaking the schema.
+Bridge the existing data into concrete prompts and workflows.
+Stay model‑agnostic so they won’t age out quickly.
+Don’t overwrite or fight your existing structure.
+I added three things:
+Root-level CONTRIBUTING.md — contributor guide.
+meta/prompt_playbook.md — model‑agnostic prompt cookbook using the existing styles and vocab.
+vocab/camera_lighting_tokens.yaml — optional camera, lighting, medium, and post‑processing tokens to layer on top of outfits.
+Everything is additive; no existing files were modified.
+Files I created and what’s in them
+CONTRIBUTING.md
+Purpose: give a clear, repo‑specific way to extend the database without guessing the rules.
+Highlights:
+Goals and constraints
+Emphasizes historically grounded, prompt‑ready data that stays consistent with vocab/schema.yaml and the 28 existing styles.
+Encourages short, composable phrases rather than prose in YAML, matching the current style.
+How to add/edit a style
+Explains the two‑file pattern: styles_index.yaml as the source of truth and styles/<id>.md as the human reference.
+Walks through required fields: aka, years, origin, influences, parts (silhouette, materials, palette, garments, accessories, grooming), designers_brands, figures_media, tokens, and visual_examples backed by real archives.
+Suggests using existing style pages (e.g., grunge or Y2K) as templates for new styles/*.md files.
+Vocab guidance
+Clarifies the roles of vocab/schema.yaml and vocab/tokens.yaml, and suggests extending existing categories rather than inventing random new keys.
+Recommends putting entirely new vocab domains (like camera/lighting) into separate files such as vocab/camera_lighting_tokens.yaml to keep the main tokens file focused.
+Meta/decade notes
+Describes how decades/*.md and meta/* are meant to work together (overviews, influence graph, timeline, sources) and asks contributors to keep those evidence‑backed and machine‑parseable where possible.
+PR etiquette
+Asks contributors to describe which styles/vocab they touched and to surface new IDs/domains in PR descriptions so tools downstream can be updated easily.
+meta/prompt_playbook.md
+Purpose: give you a ready‑to‑use, model‑agnostic “how to actually prompt with this repo” guide, using only data that already exists.
+Highlights:
+Prompt anatomy
+Breaks prompts into: style anchor, time/place, clothes (silhouette/materials/palette/garments), accessories and grooming, setting, plus camera and lighting.
+Provides a generic template that stitches together fields from styles_index.yaml, vocab/tokens.yaml, and optional camera/lighting vocab.
+Concrete movement examples
+Grunge: layered flannel + ripped jeans + combat boots, Seattle alley setting, unkempt grooming; turned into a full sentence prompt for an early‑90s street portrait.
+Y2K millennium futurism: chrome + black techwear, low‑rise straps, tiny sunglasses, glossy lip, rooftop club; turned into a late‑90s/1999 club fashion prompt.
+Power dressing: broad‑shouldered blazer, pencil skirt, bold jewelry, corporate tower; turned into an 80s editorial prompt emphasizing silhouette and lighting.
+Using the influence graph to mix styles
+Encourages using meta/influence_graph.md as the “permission structure” for hybrids (punk + deconstruction, hip‑hop + preppy, rave + skate, new romantic + goth, etc.), keeping one movement as the structural base and using the other for palette/material/accessories.
+Year‑accurate prompting
+Shows how to use meta/timeline.md and decades/*.md to keep silhouettes and scenes coherent with specific years and avoid impossible mashups (e.g., 1966 paper dresses with 1999 Y2K techwear).
+Camera/lighting and video notes
+Explains how to plug in camera framing, lens, and lighting tokens (from the new vocab file) without changing the core outfit description.
+Adds a small section on adapting the same style data for video (adding verbs/motion like “walking down the runway”, “tracking shot”, etc.).
+vocab/camera_lighting_tokens.yaml
+Purpose: give you a small, reusable vocab of camera, lighting, medium, and post‑processing phrases that can sit on top of any outfit description from the main data.
+Contents:
+camera_framing_tokens
+Phrases like full-body runway shot, full-body street style shot, three-quarter editorial portrait, tight beauty close-up, candid street snapshot, etc.
+camera_lens_tokens
+Options like 28mm wide-angle street lens, 35mm documentary street lens, 50mm normal perspective lens, 85mm shallow-depth portrait lens, 135mm compressed runway lens.
+lighting_tokens
+Things like soft studio key light, hard on-camera flash, golden-hour backlight, club strobe lighting, neon sign glow, moody high-contrast chiaroscuro light.
+medium_tokens
+Aesthetic carriers like 1970s film grain, 35mm color film look, instant Polaroid aesthetic, high-gloss magazine editorial, street photography zine style.
+postprocessing_tokens
+Finishing touches such as slight motion blur, light film grain, subtle vignette, high-contrast fashion retouch, matte finish color grade.
+These are deliberately kept in their own file so they don’t interfere with any existing code or tooling that expects vocab/tokens.yaml to only contain clothes/scene vocab.
+What I pushed to GitHub
+All changes live on a feature branch and are wired into a PR:
+Branch: ai-fashion-extensions created off main.
+Commit: Adds CONTRIBUTING.md, meta/prompt_playbook.md, and vocab/camera_lighting_tokens.yaml.
+Pull request: Add contributing guide, prompt playbook, and camera/lighting vocab
+Nothing in styles_index.yaml, styles/, decades/, meta/influence_graph.md, meta/timeline.md, or the existing vocab files was modified; you can review/merge/discard the PR with zero risk to the current dataset.
+Ideas for future expansions (if you want to go further)
+If you want to keep extending this repo, here are some directions that would slot cleanly into the existing structure:
+More vocab dimensions
+Texture/finish vocab (e.g., patina, distressing, wet‑look vinyl) as another YAML file parallel to tokens.yaml.
+Regional variants (e.g., Japanese vs US takes on the same style) with optional fields or an extra layer in the index.
+Per‑style prompt snippets
+A short “prompt recipes” block in each styles/*.md referencing the shared vocab, so every movement ships with 2–3 canonical prompts.
+Tooling
+Tiny scripts (in a tools/ dir) to validate styles_index.yaml against vocab/schema.yaml and ensure every style has a matching markdown file, at least N visual examples, etc.
+If you’d like, I can next:
+Thread more concrete prompt recipes into a couple of your favorite movements, or
+Help design a simple validator/CLI to keep the YAML clean as you add more styles.
+Yep—there are a few high-leverage things that will make this repo feel like a real “style SDK” instead of just a token dump. Here are the best additions for Shoegaze x Sound-as-Image, with copy/paste-ready file ideas.
+
+1) A “Mapping Bible”: how audio concepts become visual concepts
+This keeps your style consistent across prompts, shaders, and future engines.
+Create docs/audio_to_visual_mappings.md
+# Audio → Visual Mappings (Shoegaze Sound-as-Image)
+
+Use these rules to translate any sound description into visuals.
+
+## Core mappings
+- Pitch → vertical position (high = high)
+- Loudness → brightness / bloom intensity
+- Timbre brightness (spectral centroid) → edge sharpness / sparkle
+- Noise amount → grain density / fog thickness
+- Harmonicity → clean banding vs smeared clouds
+- Transients → thin vertical streaks / needle highlights
+- Reverb → ghost trails / depth haze / temporal smear
+- Distortion → texture thickness + edge fuzz + interference shimmer
+- Chorus/flange/phaser → phase drift ripples + moiré shimmer
+- Compression → flattened contrast + “pumped” glow rhythm
+
+## Shoegaze glue (always-on)
+- soften boundaries
+- add memory materials (film/paper/signal)
+- keep math inside haze (not infographic)
+
+Why it matters: your Copilot agent (and future you) can generate new engines just by following this.
+
+2) A small “Prompt Compiler” reference implementation (JS + Python)
+Even if you don’t use it directly, it makes the repo executable.
+Create tools/compile_prompt.js
+import fs from "fs";
+
+const style = JSON.parse(fs.readFileSync("style/style.json", "utf8"));
+
+function compilePrompt({ subject, preset = null, enabledBlocks = null, palette = null, includeInterference = null }) {
+  const cfg = preset ? style.presets[preset] : style.defaults;
+  const blocks = enabledBlocks ?? cfg.enabledBlocks ?? style.defaults.enabledBlocks;
+
+  let parts = [];
+  if (subject) parts.push(subject);
+
+  // Allow optional interference toggle
+  const finalBlocks = [...blocks];
+  const wantsInterference =
+    includeInterference === true ||
+    (includeInterference === null && cfg.enabledBlocks?.includes("interference"));
+
+  if (wantsInterference && !finalBlocks.includes("interference") && style.blocks.interference) {
+    finalBlocks.push("interference");
+  }
+
+  for (const b of finalBlocks) {
+    const block = style.blocks[b];
+    if (Array.isArray(block)) parts.push(...block);
+  }
+
+  const pal = palette ?? cfg.palette;
+  if (pal) parts.push(style.compiler?.paletteFormat?.replace("{palette}", pal) ?? `palette:${pal}`);
+
+  const prompt = parts.join(style.compiler?.joiner ?? ", ");
+  const neg = (style.negatives || []).join(", ");
+  const negativePrefix = style.compiler?.negativePrefix ?? "--no ";
+  return neg.length ? `${prompt} ${negativePrefix}${neg}` : prompt;
+}
+
+// Example usage:
+console.log(compilePrompt({ subject: "silhouette implied by beat-frequency interference", preset: "total_wall" }));
+
+Create tools/compile_prompt.py
+import json
+
+with open("style/style.json", "r", encoding="utf-8") as f:
+    style = json.load(f)
+
+def compile_prompt(subject, preset=None, enabled_blocks=None, palette=None, include_interference=None):
+    cfg = style["presets"][preset] if preset else style["defaults"]
+    blocks = enabled_blocks or cfg.get("enabledBlocks") or style["defaults"]["enabledBlocks"]
+
+    parts = []
+    if subject:
+        parts.append(subject)
+
+    final_blocks = list(blocks)
+    wants_interference = (
+        include_interference is True
+        or (include_interference is None and "interference" in cfg.get("enabledBlocks", []))
+    )
+    if wants_interference and "interference" not in final_blocks and "interference" in style["blocks"]:
+        final_blocks.append("interference")
+
+    for b in final_blocks:
+        block = style["blocks"].get(b)
+        if isinstance(block, list):
+            parts.extend(block)
+
+    pal = palette or cfg.get("palette")
+    if pal:
+        fmt = style.get("compiler", {}).get("paletteFormat", "palette:{palette}")
+        parts.append(fmt.replace("{palette}", pal))
+
+    joiner = style.get("compiler", {}).get("joiner", ", ")
+    prompt = joiner.join(parts)
+
+    neg = ", ".join(style.get("negatives", []))
+    neg_prefix = style.get("compiler", {}).get("negativePrefix", "--no ")
+    return f"{prompt} {neg_prefix}{neg}" if neg else prompt
+
+if __name__ == "__main__":
+    print(compile_prompt("a face implied by harmonic ladders", preset="gentle_gaze"))
+
+This turns the repo into a “style package you can run.”
+
+3) A “Golden Set”: reference prompts you never change
+This is how you prevent style drift when you keep adding tokens.
+Create tests/golden_prompts.md
+# Golden Prompts (do not edit casually)
+
+## G1: Harmonic Ladder Portrait
+portrait implied by harmonic ladders, face emerging from banded frequency architecture, shoegaze aesthetic, halation glow, film grain veil, edges dissolving into haze, palette:haze_pastel
+
+## G2: Granular Cloud Dancer
+a dancer implied by granular particle swarm, micro-event glitter fog, dreamy diffusion bloom, tactile noise, gentle vignette, palette:nocturne_neon
+
+## G3: Reich Phasing Cover
+album cover design, minimal subject implied by phasing process, moire-from-time shimmer inside haze, matte sleeve texture, typography ghost, palette:cd_iridescent
+
+## G4: Convolution Cathedral
+echo cathedral formed by impulse-response trails, temporal smears stacked into arches, fog volume, halation, dust and scratches, palette:milkglass
+
+
+4) A “Style Dial” guide: how to make it subtle vs extreme
+This gives you consistent control.
+Create docs/style_dials.md
+# Style Dials (Shoegaze)
+
+## Dial: Clarity (0 → 1)
+- 0.1: subject mostly implied
+- 0.3: eyes or one highlight is crisp
+- 0.6: too clean; you're leaving shoegaze territory
+
+## Dial: Interference (0 → 1)
+- 0.1: shimmer only (suggestion)
+- 0.4: visible moiré/phase drift
+- 0.7: "total wall" (must be fused into haze)
+
+## Dial: Memory Material
+Pick at least one:
+- film (halation + dust)
+- paper (fiber + misregistration)
+- signal (CRT scanlines + smear)
+
+## Dial: Focal Anchor
+Always choose ONE:
+- eyes
+- streetlight
+- single sharp edge
+- bright specular highlight
+
+
+5) “Engine Packs” as mini manifests (so you can plug engines in/out)
+Instead of only modules, make engine manifests that point to modules + suggested presets.
+Create engines/harmonic_ladder.engine.json
+{
+  "id": "harmonic_ladder",
+  "name": "Harmonic Ladder",
+  "modules": [
+    "modules/sound_math/00_engine_core.md",
+    "modules/sound_math/01_harmonic_ladder.md"
+  ],
+  "recommendedPresets": ["pastel_wash", "gentle_gaze", "total_wall"],
+  "recommendedPalettes": ["haze_pastel", "milkglass", "cd_iridescent"],
+  "notes": "Best when bands are smooth and stacked; avoid infographic cues."
+}
+
+Do the same for granular_cloud, polyrhythm_lattice, etc.
+
+6) A “No-Infographic” sanitizer list
+You already have negatives, but this makes it bulletproof for sound math.
+Add to style/style.json a new negative group:
+{
+  "negativeGroups": {
+    "no_infographic": [
+      "diagram",
+      "axes",
+      "grid with numbers",
+      "labeled chart",
+      "annotation arrows",
+      "UI overlay",
+      "technical schematic",
+      "infographic"
+    ]
+  }
+}
+
+Then your compiler can append it when using sound_as_image engines.
+
+7) A tiny dataset/board placeholder (for future reference images)
+Even if you don’t add images now, the folder signals intent.
+Add folders:
+refs/
+  README.md
+  boards/
+    sound_math.md
+    shoegaze_photography.md
+
+refs/README.md
+# Refs
+Put image boards or links here.
+
+- sound_math.md: spectrograms, cymatics, phase portraits, interference patterns
+- shoegaze_photography.md: haze, bloom, album cover textures, print/signal artifacts
+
+
+The 3 highest-value “next” additions (if you only do a few)
+docs/audio_to_visual_mappings.md (consistency + generativity)
+tools/compile_prompt.js (repo becomes runnable)
+tests/golden_prompts.md (prevents style drift)
+If this sparks you, next knock on → “Spectrogram-to-scene prompt generator”: you describe a sound (“bright plucky arps + long reverb + tape wobble”) and it outputs a complete shoegaze sound-math prompt + shader preset automatically.
+Yes—there are a few really useful “style repo” additions that make it behave like a real package: versioning, changelog, naming rules, contribution rules, drift control, and a couple of “style failure fixers.” Here are the best ones, all repo-ready.
+
+4) Versioning + changelog (so you can evolve safely)
+CHANGELOG.md
+# Changelog — Shoegaze Style
+
+## [1.0.0] — Initial release
+- Core shoegaze blocks (haze, bloom, grain, dissolve rules)
+- Sound-as-image modules (harmonics, granular, FM, polyrhythm, convolution, phase portraits)
+- Prompt compilers (JS + Python)
+- Golden prompts + drift checklist
+
+## Versioning rules
+- Patch (x.y.Z): token additions, doc fixes, non-breaking changes
+- Minor (x.Y.z): new blocks/modules/presets that don’t break compilers
+- Major (X.y.z): schema changes to style/style.json or compiler contract
+
+VERSIONING.md
+# Versioning contract
+
+This repo follows Semantic Versioning.
+- style/style.json MUST include "version"
+- Any change to JSON keys, required fields, or compiler behavior = MAJOR bump
+- Adding blocks/presets/modules without removing or renaming existing = MINOR bump
+- Fixing typos / adding recipes / docs = PATCH bump
+
+
+5) Naming rules + consistency guidelines (so Copilot doesn’t go feral)
+docs/naming_rules.md
+# Naming rules (Shoegaze Style)
+
+## Block names (style/style.json)
+- lower_snake_case
+- short and literal: "print_memory", "signal_memory", "veil_layers"
+- avoid synonyms that overlap (pick one canonical term)
+
+## Token style
+- Prefer short phrases: "film grain clumps" not paragraphs
+- Avoid commas inside a token (commas are separators)
+- Avoid model-specific syntax inside tokens (keep that in adapters)
+
+## Module files
+- One comma-separated line per module file
+- Module filename describes the behavior, not the vibe:
+  - good: 03_interference.md
+  - good: 01_harmonic_ladder.md
+  - bad: 07_vibes.md
+
+
+6) “Failure Fixers”: fast patches when outputs go wrong
+docs/failure_fixers.md
+# Failure Fixers (fast patches)
+
+Use these when generations drift away from shoegaze.
+
+## Too crisp / too modern
+Add:
+- "foreground haze veil"
+- "low contrast rolloff"
+- "film grain clumps"
+- "halation glow"
+Negatives:
+- "ultra sharp"
+- "clinical HDR"
+- "crisp outlines"
+
+## Too noisy / no focal anchor
+Add:
+- "eyes as the only sharp detail" OR "single sharp specular highlight"
+- "large negative space"
+Remove:
+- excessive interference tokens
+Rule:
+- one anchor detail, everything else dissolves
+
+## Interference looks like a clean overlay
+Add:
+- "grain veil"
+- "smudged highlights"
+- "fog volume"
+Replace:
+- "clean geometric op art" -> "moire shimmer inside haze"
+Negatives:
+- "clean vector lines"
+
+## Looks like an infographic
+Add negative group:
+- diagram, axes, labels, UI overlay, chart
+Add:
+- "natural phenomenon"
+- "embedded in atmosphere"
+
+
+7) A “Style Linter” checklist (human or script-friendly)
+tests/style_linter.md
+# Style Linter (manual or scripted)
+
+A prompt passes if:
+- Contains at least 1 core token ("shoegaze aesthetic" OR "wall of texture" OR "edges dissolving into haze")
+- Contains at least 1 light token (halation/bloom/leaks)
+- Contains at least 1 texture token (grain/dust/paper)
+- Contains at least 1 dissolve/composition behavior (field over subject / negative space / dissolve)
+- Does NOT contain infographic terms when using sound_math engine (diagram/axes/labels)
+
+Optional but recommended:
+- Includes a palette token
+- Includes one memory material (film/paper/signal)
+- Includes a single focal anchor
+
+If you ever want this automated, your Copilot agent can turn it into a small Node/Python linter.
+
+8) Contribution guide (so you can safely add new engines)
+CONTRIBUTING.md
+# Contributing to shoegaze_style
+
+## How to add a new sound engine
+1) Create a module in `modules/sound_math/`:
+   - one-line comma-separated tokens
+2) Add it to `style/sound_math.lexicon.yaml` (optional but recommended)
+3) Add 1–2 prompts using it in `recipes/sound_as_image_40.md`
+4) Add 1 test case in `tests/sound_math_fixtures.yaml`
+5) Run / re-check golden prompts for drift
+
+## Token quality rules
+- Tokens must describe visible behavior/material, not vague vibes
+- Prefer "what happens" over "what it is"
+  - good: "phase drift ripples"
+  - bad: "cool trippy vibes"
+
+
+9) A “Style Card” summary (nice for your UI + README badges)
+docs/style_card.md
+# Style Card — Shoegaze
+
+**Core promise:** wall-of-texture, atmosphere-first, edges dissolve, nostalgic memory materials.
+
+**Must-have layers:** haze + bloom/halation + grain  
+**Optional spice:** interference math (moire / phase drift / beat bands)  
+**Focal anchor rule:** one crisp detail only
+
+**Best palettes:** haze_pastel, nocturne_neon, sepia_zine, cd_iridescent  
+**Best engines:** harmonic_ladder, granular_cloud, reich_phasing, convolution_reverb, phase_portraits
+
+**Avoid:** crisp outlines, clinical HDR, infographic labeling
+
+
+10) Repo “entrypoint index” for agents and humans
+INDEX.md
+# INDEX
+
+Start here:
+- style/style.json (canonical style contract)
+- docs/audio_to_visual_mappings.md (sound → image translation rules)
+- recipes/sound_as_image_40.md (prompt seeds)
+- tools/compile_prompt.js (runnable compiler)
+- tests/golden_prompts.md (drift anchors)
+
+Sound engines:
+- modules/sound_math/ (each file is one engine component)
+
+Quality:
+- docs/failure_fixers.md
+- tests/style_linter.md
+
+
+The single most valuable “extra” (optional)
+If you ever plan to have MANY style repos, add a standard “manifest schema” doc.
+docs/style_schema.md
+# Style Schema (for all style repos)
+
+Required:
+- style/style.json with:
+  - id, name, version
+  - blocks (object of arrays of tokens)
+  - defaults (enabledBlocks)
+  - negatives (array)
+  - presets (object)
+  - compiler (joiner, negativePrefix, order)
+
+Optional:
+- palettes
+- shader presets
+- engines
+- negativeGroups
+- tools/ compiler scripts
+- tests/ golden prompts
+
+
+If this sparks you, next knock on → “auto-generate README + docs from style.json” (a script that emits documentation so every new style repo stays consistent automatically).
+Yep—there are still a handful of “this will save your life later” additions that make the repo operate like a product: metadata for discovery, compatibility notes, automated doc generation hooks, and a couple “style mixers” so shoegaze can blend cleanly with other repos.
+Here are the best final upgrades, all copy/paste-ready.
+
+11) A machine-readable style index (for search + catalogs)
+style/index.json
+{
+  "id": "shoegaze",
+  "name": "Shoegaze",
+  "version": "1.0.0",
+  "category": "atmosphere/texture",
+  "tags": [
+    "atmospheric",
+    "wall-of-texture",
+    "haze",
+    "bloom",
+    "grain",
+    "nostalgic",
+    "interference",
+    "sound-as-image",
+    "spectral"
+  ],
+  "entrypoints": {
+    "style": "style/style.json",
+    "mappings": "docs/audio_to_visual_mappings.md",
+    "quickstart": "recipes/quickstart_25.md",
+    "soundSeeds": "recipes/sound_as_image_40.md",
+    "compilerJS": "tools/compile_prompt.js",
+    "compilerPY": "tools/compile_prompt.py"
+  },
+  "compatibility": {
+    "promptEngines": ["generic", "midjourney", "sdxl", "flux"],
+    "shaderEngines": ["glsl", "webgl", "threejs", "touchdesigner"],
+    "requires": ["blocks", "negatives", "presets", "compiler"]
+  }
+}
+
+Why: your “style browser” can load this without parsing the whole style.json.
+
+12) Compatibility / tuning notes per model (practical differences)
+docs/model_tuning.md
+# Model Tuning Notes
+
+Shoegaze relies on subtlety. Different generators need different strategies.
+
+## Midjourney-ish
+- Likes poetic stacks but can over-clarify faces.
+- Use stronger negatives for sharpness.
+- If interference dominates: reduce interference tokens; let stylize do the work.
+
+## SDXL-ish
+- Responds well to explicit negatives + material tokens (film/paper/signal).
+- Avoid repeating the same concept too many times; SDXL can overfit.
+
+## Flux-ish
+- Better with shorter prompts; use fewer tokens and rely on preset choice.
+- Keep shoegaze glue (haze+bloom+grain) but remove redundancy.
+
+## General rule
+- If it becomes too clean: add "foreground haze veil", "film grain clumps", "halation glow".
+- If it becomes too noisy: add "single sharp anchor detail" and increase negative space.
+
+
+13) Style mixing rules (how shoegaze combines with other repos)
+docs/style_mixing.md
+# Style Mixing (Shoegaze as a base layer)
+
+Shoegaze is a *base style* (like reverb): it should wrap other styles, not replace them.
+
+## Mixing algorithm (simple)
+- Take other_style.subject + other_style.signature tokens
+- Add shoegaze glue: haze + bloom + grain + dissolve
+- Optional: interference if you want “math shimmer”
+- Apply BOTH negatives, but dedupe
+
+## Mix ratios
+- 80/20 (other/shoegaze): keep the other style’s identity with a shoegaze atmosphere
+- 50/50: hybrid
+- 20/80: shoegaze dominates; other style becomes a motif
+
+## Common combos
+- shoegaze + hauntology: lost futures, archive fog
+- shoegaze + vaporwave: neon mall haze with film memory
+- shoegaze + pictorialism: pure soft-focus dream print
+- shoegaze + glitch: interference inside fog (never crisp)
+
+
+14) A tiny “dedupe + normalize tokens” helper (prevents prompt bloat)
+tools/normalize_tokens.js
+export function normalizeTokens(tokens) {
+  const seen = new Set();
+  const out = [];
+  for (let t of tokens) {
+    if (!t) continue;
+    t = t.trim().replace(/\s+/g, " ");
+    if (!t) continue;
+    const key = t.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(t);
+  }
+  return out;
+}
+
+You can import this into the compiler later.
+
+15) A “Prompt QA” rubric (for humans & agents)
+docs/prompt_QA_rubric.md
+# Prompt QA Rubric (Shoegaze)
+
+Score each 0–2.
+
+## Shoegaze Core
+- [ ] Atmosphere-first (haze present)
+- [ ] Bloom/halation present
+- [ ] Grain/texture present
+- [ ] Edges dissolve / low clarity
+
+## Sound-as-Image (if used)
+- [ ] Engine tokens present (harmonic ladder / granular cloud / etc.)
+- [ ] Math embedded in haze (not diagram)
+- [ ] One focal anchor (optional but recommended)
+
+## Failure avoidance
+- [ ] No infographic terms
+- [ ] No “ultra sharp / clinical HDR” vibes
+
+Total:
+- 10–12: perfect
+- 7–9: good, tweak 1–2 areas
+- <7: missing a layer or too clean/noisy
+
+
+16) “What’s new?” auto-summary hook (so docs stay current)
+Even if you don’t automate it now, the file gives you a place to paste updates.
+docs/release_notes_template.md
+# Release Notes Template
+
+## Summary
+What changed in this release?
+
+## New blocks/modules
+- …
+
+## New engines
+- …
+
+## Behavior changes
+- …
+
+## Migration notes
+If any keys changed, how to update apps.
+
+## Known issues
+- …
+
+
+17) A tiny “style fingerprint” (helps detect drift programmatically)
+This is a hack: a short list of tokens you never remove.
+style/fingerprint.json
+{
+  "must_have_tokens": [
+    "shoegaze aesthetic",
+    "wall of texture",
+    "edges dissolving into haze",
+    "dreamy diffusion bloom",
+    "halation glow",
+    "film grain clumps",
+    "field over subject"
+  ],
+  "must_avoid_tokens": [
+    "diagram",
+    "axes",
+    "labeled chart",
+    "ultra sharp",
+    "clinical HDR",
+    "clean vector art"
+  ]
+}
+
+Your app/agent can check compiled prompts against this and warn if it drifts.
+
+18) A “one-file import” bundle (for ultra-simple consumption)
+If you want the easiest possible ingestion: ship a single JSON.
+shoegaze.bundle.json (idea)
+literally merge:
+style/style.json
+style/index.json
+style/fingerprint.json
+sound engine lexicon
+into one object.
+Your agent can generate it automatically, or you can keep it manual.
+
+If you only add ONE more thing:
+Add style/fingerprint.json. It’s small but gives you a hard guardrail so future expansions don’t dilute the style.
+If this sparks you, next knock on → “style pack generator”: a script that takes style/style.json + modules and emits the bundle, index, docs, and golden prompts automatically.
+Awesome — here’s a style pack generator you can drop into the repo. It reads style/style.json + modules + tests, then emits:
+shoegaze.bundle.json (one-file import)
+style/index.json (catalog metadata)
+dist/README.generated.md (auto-doc)
+dist/golden_prompts.generated.md (auto-dedupe + formatted)
+dist/report.json (what it found, what’s missing)
+(optional) validates style/fingerprint.json
+All copy/paste-ready.
+
+1) tools/generate_stylepack.js
+#!/usr/bin/env node
+/**
+ * Style Pack Generator
+ * Inputs:
+ *   - style/style.json (required)
+ *   - style/index.json (optional; will generate if missing)
+ *   - style/fingerprint.json (optional; will validate)
+ *   - modules/**/*.md (optional; inventory only)
+ *   - tests/golden_prompts.md (optional; will normalize & re-emit)
+ *
+ * Outputs:
+ *   - shoegaze.bundle.json
+ *   - style/index.json (generated if missing or --force-index)
+ *   - dist/README.generated.md
+ *   - dist/golden_prompts.generated.md
+ *   - dist/report.json
+ */
+
+import fs from "fs";
+import path from "path";
+
+const ROOT = process.cwd();
+
+function readText(p) {
+  return fs.readFileSync(p, "utf8");
+}
+function writeText(p, s) {
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  fs.writeFileSync(p, s, "utf8");
+}
+function writeJson(p, obj) {
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  fs.writeFileSync(p, JSON.stringify(obj, null, 2) + "\n", "utf8");
+}
+function exists(p) {
+  return fs.existsSync(p);
+}
+
+function listFilesRecursive(dir, exts = null) {
+  if (!exists(dir)) return [];
+  const out = [];
+  for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, ent.name);
+    if (ent.isDirectory()) out.push(...listFilesRecursive(full, exts));
+    else {
+      if (!exts) out.push(full);
+      else if (exts.includes(path.extname(ent.name).toLowerCase())) out.push(full);
+    }
+  }
+  return out;
+}
+
+function normalizeToken(t) {
+  return (t || "").trim().replace(/\s+/g, " ");
+}
+
+function dedupeTokens(tokens) {
+  const seen = new Set();
+  const out = [];
+  for (let t of tokens) {
+    t = normalizeToken(t);
+    if (!t) continue;
+    const key = t.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(t);
+  }
+  return out;
+}
+
+function parseGoldenPrompts(md) {
+  // Very simple parser:
+  // Sections separated by headings starting with "## " and blocks of text after.
+  // We’ll just keep raw blocks, and normalize whitespace.
+  const lines = md.split(/\r?\n/);
+  const items = [];
+  let currentTitle = null;
+  let buf = [];
+  const flush = () => {
+    if (currentTitle && buf.join("\n").trim()) {
+      items.push({ title: currentTitle, text: buf.join("\n").trim() });
+    }
+    buf = [];
+  };
+
+  for (const line of lines) {
+    const m = line.match(/^##\s+(.*)\s*$/);
+    if (m) {
+      flush();
+      currentTitle = m[1].trim();
+      continue;
+    }
+    if (currentTitle) buf.push(line);
+  }
+  flush();
+  return items;
+}
+
+function normalizePromptText(text) {
+  // Normalize commas/spaces a bit without changing meaning too aggressively
+  // Keep line breaks but remove double spaces.
+  return text
+    .split(/\r?\n/)
+    .map((l) => l.replace(/\s+/g, " ").trimEnd())
+    .join("\n")
+    .trim();
+}
+
+function compileSamplePrompt(style, { subject, presetName }) {
+  const cfg = presetName ? style.presets?.[presetName] : style.defaults;
+  const enabledBlocks = cfg?.enabledBlocks ?? style.defaults?.enabledBlocks ?? [];
+  const parts = [];
+  if (subject) parts.push(subject);
+
+  for (const b of enabledBlocks) {
+    const block = style.blocks?.[b];
+    if (Array.isArray(block)) parts.push(...block);
+  }
+
+  const pal = cfg?.palette;
+  if (pal) {
+    const fmt = style.compiler?.paletteFormat ?? "palette:{palette}";
+    parts.push(fmt.replace("{palette}", pal));
+  }
+
+  const joiner = style.compiler?.joiner ?? ", ";
+  let prompt = parts.join(joiner);
+
+  const negatives = dedupeTokens(style.negatives ?? []);
+  if (negatives.length) {
+    const negPrefix = style.compiler?.negativePrefix ?? "--no ";
+    prompt += ` ${negPrefix}${negatives.join(", ")}`;
+  }
+  return prompt;
+}
+
+function buildIndex(style, entrypoints) {
+  const tags = Array.isArray(style.tags) ? style.tags : [];
+  const engines = style.engines ? Object.keys(style.engines) : [];
+  return {
+    id: style.id,
+    name: style.name,
+    version: style.version,
+    category: "atmosphere/texture",
+    tags: dedupeTokens(tags.concat(engines.includes("sound_as_image") ? ["sound-as-image", "spectral"] : [])),
+    entrypoints,
+    compatibility: {
+      promptEngines: ["generic", "midjourney", "sdxl", "flux"],
+      shaderEngines: ["glsl", "webgl", "threejs", "touchdesigner"],
+      requires: ["blocks", "negatives", "presets", "compiler"]
+    }
+  };
+}
+
+function validateFingerprint(style, fingerprint) {
+  const allTokens = [];
+  for (const k of Object.keys(style.blocks || {})) {
+    const block = style.blocks[k];
+    if (Array.isArray(block)) allTokens.push(...block);
+  }
+  allTokens.push(...(style.negatives || []));
+  const set = new Set(allTokens.map((t) => normalizeToken(t).toLowerCase()));
+
+  const missingMustHave = [];
+  for (const t of fingerprint.must_have_tokens || []) {
+    if (!set.has(normalizeToken(t).toLowerCase())) missingMustHave.push(t);
+  }
+  const presentMustAvoid = [];
+  for (const t of fingerprint.must_avoid_tokens || []) {
+    if (set.has(normalizeToken(t).toLowerCase())) presentMustAvoid.push(t);
+  }
+  return { missingMustHave, presentMustAvoid };
+}
+
+function generateReadme(style, modulesInventory, enginesInventory) {
+  const blockNames = Object.keys(style.blocks || {});
+  const presetNames = Object.keys(style.presets || {});
+  const paletteNames = style.palettes ? Object.keys(style.palettes) : [];
+
+  const engineNames = enginesInventory.length ? enginesInventory : (style.engines ? Object.keys(style.engines) : []);
+
+  return `# ${style.name} Style Pack (generated)
+
+Version: \`${style.version}\`
+ID: \`${style.id}\`
+
+${style.description || ""}
+
+## Quick start
+Pick a preset + subject and compile.
+
+Example (gentle):
+\`${compileSamplePrompt(style, { subject: "a portrait implied by harmonic ladders", presetName: "gentle_gaze" })}\`
+
+Example (total wall):
+\`${compileSamplePrompt(style, { subject: "silhouette implied by beat-frequency interference", presetName: "total_wall" })}\`
+
+## Blocks
+${blockNames.map((b) => `- \`${b}\` (${(style.blocks?.[b]?.length ?? 0)} tokens)`).join("\n")}
+
+## Presets
+${presetNames.map((p) => `- \`${p}\`${style.presets[p]?.palette ? ` (palette: \`${style.presets[p].palette}\`)` : ""}`).join("\n")}
+
+## Palettes
+${paletteNames.length ? paletteNames.map((p) => `- \`${p}\``).join("\n") : "- (none)"}
+
+## Engines
+${engineNames.length ? engineNames.map((e) => `- \`${e}\``).join("\n") : "- (none)"}
+
+## Module inventory
+Found ${modulesInventory.length} module file(s).
+
+`;
+}
+
+function main() {
+  const args = process.argv.slice(2);
+  const forceIndex = args.includes("--force-index");
+
+  const stylePath = path.join(ROOT, "style", "style.json");
+  if (!exists(stylePath)) {
+    console.error("Missing required file: style/style.json");
+    process.exit(1);
+  }
+
+  const style = JSON.parse(readText(stylePath));
+
+  // Normalize core arrays
+  style.negatives = dedupeTokens(style.negatives || []);
+  for (const k of Object.keys(style.blocks || {})) {
+    if (Array.isArray(style.blocks[k])) style.blocks[k] = dedupeTokens(style.blocks[k]);
+  }
+
+  // Inventory modules
+  const modulesDir = path.join(ROOT, "modules");
+  const moduleFiles = listFilesRecursive(modulesDir, [".md", ".txt"]);
+  const modulesInventory = moduleFiles.map((f) => path.relative(ROOT, f));
+
+  // Engines inventory (optional)
+  const engines = style.engines ? Object.keys(style.engines) : [];
+  const enginesInventory = engines;
+
+  // Golden prompts
+  const goldenIn = path.join(ROOT, "tests", "golden_prompts.md");
+  let goldenItems = [];
+  if (exists(goldenIn)) {
+    const md = readText(goldenIn);
+    goldenItems = parseGoldenPrompts(md).map((it) => ({
+      title: it.title,
+      text: normalizePromptText(it.text)
+    }));
+  }
+
+  // Fingerprint validation
+  const fpPath = path.join(ROOT, "style", "fingerprint.json");
+  let fingerprintReport = null;
+  if (exists(fpPath)) {
+    const fp = JSON.parse(readText(fpPath));
+    fingerprintReport = validateFingerprint(style, fp);
+  }
+
+  // Ensure/Generate style/index.json
+  const entrypoints = {
+    style: "style/style.json",
+    mappings: "docs/audio_to_visual_mappings.md",
+    quickstart: "recipes/quickstart_25.md",
+    soundSeeds: "recipes/sound_as_image_40.md",
+    compilerJS: "tools/compile_prompt.js",
+    compilerPY: "tools/compile_prompt.py"
+  };
+
+  const indexPath = path.join(ROOT, "style", "index.json");
+  if (forceIndex || !exists(indexPath)) {
+    const idx = buildIndex(style, entrypoints);
+    writeJson(indexPath, idx);
+  }
+
+  // Bundle build
+  const bundle = {
+    bundleVersion: "1.0",
+    generatedAt: new Date().toISOString(),
+    style,
+    index: exists(indexPath) ? JSON.parse(readText(indexPath)) : buildIndex(style, entrypoints),
+    fingerprint: exists(fpPath) ? JSON.parse(readText(fpPath)) : null,
+    inventories: {
+      modules: modulesInventory,
+      engines: enginesInventory
+    }
+  };
+  writeJson(path.join(ROOT, "shoegaze.bundle.json"), bundle);
+
+  // Generated docs
+  writeText(path.join(ROOT, "dist", "README.generated.md"), generateReadme(style, modulesInventory, enginesInventory));
+
+  // Generated golden prompts
+  if (goldenItems.length) {
+    const out = [
+      "# Golden Prompts (generated)",
+      "",
+      "These are normalized from `tests/golden_prompts.md`.",
+      ""
+    ];
+    for (const it of goldenItems) {
+      out.push(`## ${it.title}`, "", it.text, "");
+    }
+    writeText(path.join(ROOT, "dist", "golden_prompts.generated.md"), out.join("\n"));
+  } else {
+    writeText(
+      path.join(ROOT, "dist", "golden_prompts.generated.md"),
+      "# Golden Prompts (generated)\n\nNo `tests/golden_prompts.md` found.\n"
+    );
+  }
+
+  // Report
+  const report = {
+    ok: true,
+    style: { id: style.id, name: style.name, version: style.version },
+    counts: {
+      blocks: Object.keys(style.blocks || {}).length,
+      presets: Object.keys(style.presets || {}).length,
+      palettes: Object.keys(style.palettes || {}).length,
+      negatives: (style.negatives || []).length,
+      modulesFound: modulesInventory.length,
+      goldenPromptsFound: goldenItems.length
+    },
+    fingerprint: fingerprintReport,
+    outputs: [
+      "shoegaze.bundle.json",
+      "style/index.json",
+      "dist/README.generated.md",
+      "dist/golden_prompts.generated.md",
+      "dist/report.json"
+    ],
+    notes: [
+      "Run with `node tools/generate_stylepack.js`",
+      "Use `--force-index` to regenerate style/index.json"
+    ]
+  };
+  writeJson(path.join(ROOT, "dist", "report.json"), report);
+
+  console.log("Generated style pack:");
+  for (const o of report.outputs) console.log(" -", o);
+  if (fingerprintReport) {
+    if (fingerprintReport.missingMustHave.length) {
+      console.warn("Fingerprint missing must-have tokens:", fingerprintReport.missingMustHave);
+    }
+    if (fingerprintReport.presentMustAvoid.length) {
+      console.warn("Fingerprint contains must-avoid tokens:", fingerprintReport.presentMustAvoid);
+    }
+  }
+}
+
+main();
+
+
+2) package.json (so it runs with one command)
+{
+  "name": "shoegaze_style",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:stylepack": "node tools/generate_stylepack.js",
+    "build:stylepack:force-index": "node tools/generate_stylepack.js --force-index"
+  }
+}
+
+
+3) Minimal dist/.gitkeep (optional)
+If you like keeping dist/ tracked:
+(dist is generated)
+
+
+4) (Optional but recommended) style/fingerprint.json
+If you don’t already have it, add it—generator will validate it.
+{
+  "must_have_tokens": [
+    "shoegaze aesthetic",
+    "wall of texture",
+    "edges dissolving into haze",
+    "dreamy diffusion bloom",
+    "halation glow",
+    "film grain clumps",
+    "field over subject"
+  ],
+  "must_avoid_tokens": [
+    "diagram",
+    "axes",
+    "labeled chart",
+    "ultra sharp",
+    "clinical HDR",
+    "clean vector art"
+  ]
+}
+
+
+5) How to use (human + agent friendly)
+Ensure these exist:
+style/style.json
+tests/golden_prompts.md (optional, but nice)
+modules/ (optional)
+docs/audio_to_visual_mappings.md (optional)
+Run:
+npm run build:stylepack
+
+Outputs to look at:
+shoegaze.bundle.json ← one-file import
+dist/report.json ← sanity check + fingerprint warnings
+dist/README.generated.md ← auto docs
+dist/golden_prompts.generated.md ← normalized golden prompts
+
+If you want, I can also add tools/generate_engines.js that auto-creates engines/*.engine.json by scanning modules/sound_math/*.md (so every new module instantly becomes an engine with demo prompts).
+
