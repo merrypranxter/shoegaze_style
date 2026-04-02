@@ -1,0 +1,32 @@
+{environment subject}, shoegaze aesthetic, atmospheric haze, field over subject,
+dreamy diffusion bloom, halation glow, film grain, soft focus,
+edges dissolving into texture field, {palette}
+--no crisp outlines, ultra sharp, clinical HDR
+
+---
+
+## Environment Seeds
+
+### Quickstart scenes
+1. A rainy night street scene, wet asphalt reflections, neon bleed, fog volume, soft focus lens, grain veil, highlight bloom, edges dissolving, romantic melancholy, immersive haze field
+2. A tiny subject in vast dusk haze, large negative space, gentle vignette, soft focus, grainy sky gradients, texture field swallowing edges, quiet overwhelm
+3. A chapel interior lit by CRT glow, scanline haze, phosphor smear, grain and dust, soft focus, reverb-like trails, sacred atmosphere, edges melting into signal fog
+4. A flower field rendered like sound, layered petals as spectral bands, soft gradients, haze stack, light leaks, film halation, dream pop softness, texture dominates subject
+
+### Environment seeds (25-pack entries 9–16)
+9.  rainy night street, wet asphalt reflections, sodium glow, fog volume, film grain clumps, neon bleed
+10. empty parking lot at dusk, large negative space, haze veil layers, washed midtones, gentle vignette
+11. suburban night, streetlights in mist, soft bloom, grain veil, edges dissolve, quiet overwhelm
+12. forest path in overcast fog, atmospheric perspective, tactile noise, soft focus, matte palette
+13. seaside at twilight, haze wash, halation glow, low contrast, memory-like softness
+14. bedroom lit by monitor glow, CRT bloom, scanlines, phosphor smear, nostalgic noise veil
+15. hallway liminal scene, fog volume, dust and scratches, soft diffusion, subtle interference shimmer
+16. rooftop neon haze, long exposure trails, reverb-like glow, chromatic aberration, grain clumps
+
+### Crossover: Nocturne / Weather
+Use blocks: core + light + texture + weather_space + veil_layers
+Palette: nocturne_neon or sodium_fog
+
+### Crossover: Overcast / Dusk
+Use blocks: core + light + texture + composition
+Palette: haze_pastel or milkglass

@@ -1,0 +1,26 @@
+{subject portrait}, face partially implied by haze, gauze diffusion, soft focus lens,
+shoegaze aesthetic, nostalgic grain, highlight bloom, chromatic aberration,
+background melts into texture field, {palette}, {interference}
+--no sharp pores, overdefined anatomy, hard rim light
+
+---
+
+## Portrait Variations
+
+### Gentle portrait (preset: gentle_gaze)
+{SUBJECT}, shoegaze aesthetic, dreamy diffusion bloom, halation glow, film grain, fog volume, soft focus, face partially implied by haze, field over subject, haze_pastel
+NEG: ultra sharp, clinical HDR, crisp outlines
+
+### Heavy portrait (preset: heavy_gaze)
+{SUBJECT}, wall of texture, strong halation, heavy grain clumps, subtle chromatic aberration, neon bleed, wet reflections, edges dissolve into haze, nocturne_neon, moire shimmer
+NEG: tack sharp, hard rim light, hyper-detailed pores
+
+### Portrait seeds (25-pack)
+1. portrait of {person}, eyes sharp only, everything else dissolves into haze, shoegaze aesthetic, halation glow, film grain
+2. {person} behind fogged glass, condensation texture, dreamy bloom, dust and scratches, nostalgic grain veil
+3. close-up face implied by texture field, smudged highlights, low contrast rolloff, soft focus lens, gentle vignette
+4. {person} with gauze diffusion fabric in foreground, light leaks, matte paper fiber, romantic melancholy
+5. backlit silhouette, hair as soft halo, washed midtones, halation glow, edges melt into fog volume
+6. candid portrait, long-exposure smear, time-lag ghosting, grain clumps, neon bleed through haze
+7. portrait like a photocopied zine, halftone residue, misregistration drift, xerox ghosts, sleeve-wear texture
+8. dream-pop portrait, pastel wash, milky highlights, diffusion bloom, low clarity, gentle glow

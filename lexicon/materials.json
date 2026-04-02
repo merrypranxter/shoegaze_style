@@ -1,0 +1,57 @@
+{
+  "film": [
+    "film halation",
+    "dust and scratches",
+    "film grain clumps",
+    "light leaks",
+    "fogged lens",
+    "smudged highlights"
+  ],
+  "paper_print": [
+    "matte paper fiber",
+    "newsprint softness",
+    "halftone ghost dots",
+    "ink bleed edges",
+    "misregistration drift",
+    "xerox generation loss",
+    "halftone residue",
+    "xerox ghosting",
+    "overprinted ink"
+  ],
+  "signal_memory": [
+    "CRT phosphor smear",
+    "VHS haze",
+    "scanline haze",
+    "phosphor smear",
+    "VHS noise veil",
+    "codec scars (subtle)",
+    "CRT bloom"
+  ],
+  "fabric_glass": [
+    "matte paper",
+    "fogged glass",
+    "wet asphalt reflections",
+    "gauze / fabric diffusion",
+    "gauze diffusion fabric"
+  ],
+  "iridescence": [
+    "oil-slick iridescence",
+    "holographic oil-slick highlights",
+    "iridescent oil-slick highlights (optional)"
+  ],
+  "album_sleeve": [
+    "matte sleeve texture",
+    "faded liner-note fragments",
+    "subtle spine text ghost",
+    "creased cover wear",
+    "archival sticker residue"
+  ],
+  "renderHints": {
+    "materials": [
+      "matte paper",
+      "fogged glass",
+      "wet asphalt reflections",
+      "gauze / fabric diffusion"
+    ]
+  }
+}

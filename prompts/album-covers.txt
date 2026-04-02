@@ -1,0 +1,45 @@
+album cover design, centered minimal subject dissolving into texture field,
+shoegaze aesthetic, matte paper fiber, washed midtones, soft blur, subtle typography ghost,
+large negative space, {palette}
+--no big readable text, no clean vector poster look
+
+---
+
+## Album Cover Seeds
+
+### Template
+album cover design, {SUBJECT}, centered minimal subject, large negative space,
+matte paper fiber, subtle typography ghost, washed midtones, shoegaze aesthetic, {PALETTE}
+NEG: big readable text, clean vector typography
+
+### Seeds (25-pack entries 23–25)
+23. album cover design, centered minimal subject dissolving into texture field, matte sleeve texture, subtle typography ghost
+24. sleeve-worn cover with sticker residue, faded liner-note fragments, washed midtones, film grain, negative space
+25. abstract shoegaze cover: interference silhouette, halftone residue, paper fiber, barely readable caption fragments
+
+### Extended seeds
+- Minimal centered silhouette emerging from interference, beat-frequency bands, moire shimmer, paper fiber texture, subtle typography ghost (barely readable), matte print look, washed midtones, large negative space
+- Zine-collage portrait: halftone residue, xerox ghosts, torn paper edges, misregistration, matte grain, bloom haze, nostalgic warmth, subject half-lost in print texture
+- Abstract shoegaze cover: interference silhouette, halftone residue, paper fiber, barely readable caption fragments, sepia_zine palette
+
+---
+
+## Album Cover Layout Rules
+
+- Centered minimal subject → large negative space (70–80% of frame)
+- Typography is a ghost, not a headline (barely readable, smeared, faded stamp marks)
+- Texture field dominates: subject is implied, not dominant
+- Memory materials: matte sleeve texture, faded liner notes, sleeve wear, archival sticker residue
+- Palette: sepia_zine or nocturne_neon or cd_iridescent
+
+## Album Artifacts (tokens to use)
+- matte sleeve texture
+- faded liner-note fragments
+- subtle spine text ghost
+- creased cover wear
+- archival sticker residue
+- barely readable text remnants
+- smeared caption fragments
+- overprinted letters
+- faded stamp marks
+- ghost typography, not headline

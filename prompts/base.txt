@@ -1,0 +1,4 @@
+{subject}, shoegaze aesthetic, wall of texture, atmospheric haze, dreamy diffusion bloom,
+edges dissolving into grain, halation, film grain, subtle light leaks,
+low micro-contrast, soft focus, gentle vignette, {palette}, {extra_texture}, {interference}
+--no crisp outlines, ultra sharp, clinical HDR
